@@ -1,0 +1,1 @@
+close allclear allclcFe = 2000;fid = fopen('3ATF2A/3ATF2A_001.dat','r','b');  x = fread(fid,[6,inf],'single')';   % Lecture du fichier binairefclose(fid);t = [0:1/Fe:(length(x)-1)/Fe]';for i=1:6    figure, plot(t,x(:,i))end

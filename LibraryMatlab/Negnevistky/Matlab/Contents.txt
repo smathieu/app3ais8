@@ -1,0 +1,176 @@
+============================================================================
+  Demonstrations of fuzzy systems, neural networks, genetic algorithms and
+  hybrid intelligent systems (MATLAB 6.5)
+============================================================================
+
+============================================================================
+Reference: Negnevitsky, M., "Artificial Intelligence: A Guide to Intelligent
+           Systems", 2nd edn. Addison Wesley, Harlow, England, 2005.
+============================================================================
+
+=================
+   Fuzzy Logic
+=================
+
+A Fuzzy Expert System for Operating a Service Centre of Spare 
+Parts: Mark 1 (12-rule system)
+  Filename: fuzzy_centre_1.m
+  Filename: Centre_1.fis
+  Reference: Sec. 4.7 Building a fuzzy expert system
+
+A Fuzzy Expert System for Operating a Service Centre of Spare
+Parts: Mark 2 (27-rule system)
+  Filename: fuzzy_centre_2.m
+  Filename: Centre_2.fis
+  Reference: Sec. 4.7 Building a fuzzy expert system
+
+A Fuzzy Expert System for Operating a Service Centre of Spare
+Parts: Mark 3 (45-rule system)
+  Filename: fuzzy_centre_3.m
+  Filename: Centre_3.fis
+  Reference: Sec. 4.7 Building a fuzzy expert system
+
+Water Sprinkler Control System: Mark 1 (9-rule system)
+  Filename: fuzzy_sprinkler_1.m
+  Filename: Sprinkler_1.fis
+  Reference: Sec. 4.7 Building a fuzzy expert system
+
+Water Sprinkler Control System: Mark 2 (15-rule system)
+  Filename: fuzzy_sprinkler_2.m
+  Filename: Sprinkler_2.fis
+  Reference: Sec. 4.7 Building a fuzzy expert system
+
+A Fuzzy Expert System for Assessing Mortgage Applications
+  Filename: fuzzy_mortgage.m
+  Filename: Mortgage_1.fis
+  Filename: Mortgage_2.fis
+  Filename: Mortgage_3.fis
+  Reference: Sec. 9.3 Will a fuzzy expert system work for my problem?
+
+
+=====================
+   Neural Networks
+=====================
+
+The perceptron: learning linearly separable functions
+  Filename: Perceptron_AND.m
+  Reference: Sec. 6.3 The perceptron
+
+The perceptron: learning linearly separable functions
+  Filename: Perceptron_OR.m
+  Reference: Sec. 6.3 The perceptron
+
+The perceptron: an attempt to learn linearly non-separable functions
+  Filename: Perceptron_XOR.m
+  Reference: Sec. 6.3 The perceptron
+
+Back-propagation algorithm
+  Filename: XOR_bp.m
+  Reference: Sec. 6.4 Multilayer neural networks
+
+Back-propagation algorithm
+  Filename: Bipolar_XOR_bp.m
+  Reference: Sec. 6.4 Multilayer neural networks
+
+Back-propagation algorithm: learning with momentum
+  Filename: XOR_bp_m.m
+  Reference: Sec. 6.5 Accelerated learning in multilayer neural networks
+  
+Back-propagation algorithm: learning with adaptive learning rate
+  Filename: XOR_bp_alr.m
+  Reference: Sec. 6.5 Accelerated learning in multilayer neural networks
+             
+Back-propagation algorithm: learning with momentum and adaptive learning rate
+  Filename: XOR_bp_m_alr.m
+  Reference: Sec. 6.5 Accelerated learning in multilayer neural networks
+             
+The Hopfield network
+  Filename: Hopfield.m
+  Reference: Sec. 6.6 The Hopfield network
+
+Competitive learning
+  Filename: Competitive.m
+  Reference: Sec. 6.8.2 Competitive learning
+
+Kohonen self-organising feature map
+  Filename: Kohonen.m
+  Reference: Sec. 6.8 Self-organising neural networks
+
+Character recognition neural networks
+  Filename: digit_recognition.m
+  Reference: Sec. 9.4 Will a neural network work for my problem?
+
+Bit maps for digit recognition
+  Filename: bit_maps.m
+  Reference: Sec. 9.4 Will a neural network work for my problem?
+
+Iris plant classification: Back-propagation algorithm
+  Filename: Iris_bp.m
+  Reference: Sec. 9.4 Will a neural network work for my problem?
+
+Iris plant classification: Competitive learning
+  Filename: Iris_compet.m
+  Reference: Sec. 9.4 Will a neural network work for my problem?
+
+A data set for Iris plant classification
+  Filename: Iris_data.m
+  Reference: Sec. 9.4 Will a neural network work for my problem?
+
+
+========================
+   Genetic Algorithms
+========================
+
+Genetic algorithms: the fitness function of a single variable
+  Filename: GA_1.m
+  Reference: Sec. 7.3 Genetic algorithms
+
+Genetic algorithms: the fitness function of two variables
+  Filename: GA_2.m
+  Reference: Sec. 7.3 Genetic algorithms
+
+
+Genetic algorithms: the Travelling Salesman Problem
+  Filename: GA_TSP.m
+  Reference: Sec. 9.5 Will genetic algorithms work for my problem?
+
+
+================================
+   Hybrid Intelligent Systems
+================================
+
+ANFIS: Adaptive Neuro-Fuzzy Inference System
+  Filename: ANFIS_Sugeno.m
+  Reference: Sec.8.4 ANFIS: Adaptive Neuro-Fuzzy Inference System
+
+Cardiac SPECT diagnosis: Mark 1 (Neural classification)
+  Filename: SPECT_1.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+Cardiac SPECT diagnosis: Mark 2 (Neuro-fuzzy classification)
+  Filename: SPECT_2.m
+  Filename: SPECT.fis
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+Cardiac SPECT diagnosis: training data set
+  Filename: SPECT_train.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+Cardiac SPECT diagnosis: test data set
+  Filename: SPECT_test.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+ANFIS: Time series prediction - Mark 1 (four inputs)
+  Filename: ANFIS_trajectory1.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+ANFIS: Time series prediction - Mark 2 (six inputs)
+  Filename: ANFIS_trajectory2.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+Data for an aircraft trajectory prediction system
+  Filename: ANFIS_data.m
+  Reference: Sec. 9.6 Will a hybrid intelligent system work for my problem?
+
+
+

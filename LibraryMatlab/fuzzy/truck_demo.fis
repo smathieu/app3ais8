@@ -1,0 +1,84 @@
+[System]
+Name='truck_demo'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=25
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='X'
+Range=[0 100]
+NumMFs=5
+MF1='S2':'trapmf',[0 0 4 32]
+MF2='S1':'trapmf',[25 40 40 55]
+MF3='CE':'trapmf',[45 50 50 55]
+MF4='B1':'trapmf',[45 60 60 75]
+MF5='B2':'trapmf',[68 96 100 100]
+
+[Input2]
+Name='Phi'
+Range=[-90 270]
+NumMFs=7
+MF1='S3':'trapmf',[-90 -90 -90 20]
+MF2='S2':'trapmf',[-40 10 10 60]
+MF3='S1':'trapmf',[20 60 60 100]
+MF4='CE':'trapmf',[80 90 90 100]
+MF5='B1':'trapmf',[80 120 120 160]
+MF6='B2':'trapmf',[120 170 170 220]
+MF7='B3':'trapmf',[160 270 270 270]
+
+[Output1]
+Name='Rotation'
+Range=[-30 30]
+NumMFs=7
+MF1='S3':'trapmf',[-30 -30 -30 -15]
+MF2='S2':'trapmf',[-25 -15 -15 -5]
+MF3='S1':'trapmf',[-10 -5 -5 0]
+MF4='CE':'trapmf',[-2.5 0 0 2.5]
+MF5='B1':'trapmf',[0 5 5 10]
+MF6='B2':'trapmf',[5 15 15 25]
+MF7='B3':'trapmf',[15 30 30 30]
+
+
+[Rules]
+1 1, 3 (1) : 1
+1 2, 1 (1) : 1
+1 3, 6 (1) : 1
+1 4, 1 (1) : 1
+1 5, 7 (1) : 1
+1 6, 1 (1) : 1
+1 7, 7 (1) : 1
+2 1, 1 (1) : 1
+2 2, 3 (1) : 1
+2 3, 1 (1) : 1
+2 4, 6 (1) : 1
+2 5, 1 (1) : 1
+2 6, 7 (1) : 1
+2 7, 1 (1) : 1
+3 1, 2 (1) : 1
+3 2, 1 (1) : 1
+3 3, 3 (1) : 1
+3 4, 1 (1) : 1
+3 5, 5 (1) : 1
+3 6, 1 (1) : 1
+3 7, 6 (1) : 1
+4 1, 1 (1) : 1
+4 2, 1 (1) : 1
+4 3, 1 (1) : 1
+4 4, 2 (1) : 1
+4 5, 1 (1) : 1
+4 6, 5 (1) : 1
+4 7, 1 (1) : 1
+5 1, 1 (1) : 1
+5 2, 1 (1) : 1
+5 3, 1 (1) : 1
+5 4, 1 (1) : 1
+5 5, 2 (1) : 1
+5 6, 1 (1) : 1
+5 7, 5 (1) : 1
