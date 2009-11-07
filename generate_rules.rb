@@ -5,15 +5,28 @@ f = File.open "rules.txt", "w"
     1.upto(3) {|c|
       1.upto(3) {|d|
         res = a+b+c+d
-        if res <= 5
+        if res <= 4
           res = 1
-        elsif res > 5 && res < 8
+        elsif res == 5
           res = 2
-        elsif res >= 8 && res < 11
+        elsif res == 6
+          res = 2
+        elsif res == 7
           res = 3
-        else
+        elsif res == 8
           res = 4
+        elsif res == 9
+          res = 3
+        elsif res == 10
+          res = 2
+        elsif res == 11
+          res = 2
+        elsif res == 12
+          res = 1
+        else
+          res = 1
         end
+
         f.write "#{a} #{b} #{c} #{d}, #{res} (1) : 1\n"
       }
     }
