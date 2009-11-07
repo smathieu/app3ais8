@@ -4,40 +4,35 @@ function fuzzy_app3
     clear all
     clc
     
-    Fe = 2000;
-    f = 20;
-    
-    falls = [...
-        '3ITB1A'; ...
-        '3ITB1B'; ...
-        '3ITB1C'; ...
-        '3ATF2A'; ...
-        '3ATF2B'; ...
-        '3ATF2C'; ...
-        '3SVF3A'; ...
-        '3SVF3B'; ...
-        '3SVF3C';];
+    fuzzy_logic_fis = readfis('fuzzy.fis');
+    falls = fuzzy_get_preprocessed_data(get_falls);
+    non_falls = fuzzy_get_preprocessed_data(get_non_falls);
 
-    non_falls = [...
-        '3ITB1D'; ...
-        '3ATF2D'; ...
-        '3NNC4A'; ...
-        '3NNC4B'; ...
-        '3NNC4C'; ...
-        '3NNC4D'];
+    % Optimize get_peak_count
+%     data = non_falls(6).Sensor1;
+%     plot(data)
+%     get_peak_count(data);
     
-    %Get falls
-    falls_data = []
-    for i = 1 : length(falls)
-        file = falls(i, :);
-        for j = 1:5
-            ext = sprintf('00%d', j);
-            data = load_file('Sujet_3', file, ext);
-        end
+    falls_count = 0;
+    non_falls_count = 0;
+    values = non_falls;
+    for i = 1:length(values)
+        data = values(i);
+        inputs = [ ...
+            get_peak_count(data.Sensor2), ...
+            get_peak_count(data.Sensor3), ...
+            get_peak_count(data.Sensor5), ...
+            get_peak_count(data.Sensor6) ...
+            ]
+        output = evalfis( inputs, fuzzy_logic_fis)
         
-        temp_data = data(:,3);
-        temp_data = downsample_signal(temp_data, f, Fe);
-        temp_data = diff(temp_data);
-        falls_data = [falls_data; temp_data];
+        if( output >= 0.5 )
+            falls_count = falls_count + 1;
+        else
+            non_falls_count = non_falls_count + 1;
+        end
     end
-    fuzzy = readfis('fuzzy.fis');
+    
+    total = falls_count + non_falls_count;
+    fprintf('Falls : %d/%d => %d\n', falls_count, total, round(falls_count/total*100))
+    fprintf('Non falls : %d/%d => %d\n', non_falls_count, total, round(non_falls_count/total*100))

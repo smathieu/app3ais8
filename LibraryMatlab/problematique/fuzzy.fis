@@ -4,7 +4,7 @@ Type='mamdani'
 Version=2.0
 NumInputs=4
 NumOutputs=1
-NumRules=2
+NumRules=81
 AndMethod='min'
 OrMethod='max'
 ImpMethod='min'
@@ -13,42 +13,42 @@ DefuzzMethod='centroid'
 
 [Input1]
 Name='torse_y'
-Range=[0 1]
+Range=[0 10]
 NumMFs=3
-MF1='mf1':'trimf',[0 0 0.2]
-MF2='mf2':'trimf',[0.1 0.5 0.9]
-MF3='mf3':'trimf',[0.8 1 1]
+MF1='few':'trimf',[0 0 1.5]
+MF2='some':'trimf',[-0.5 1 1.5]
+MF3='lots':'trapmf',[0.5 2 10 10]
 
 [Input2]
 Name='torse_z'
-Range=[0 1]
+Range=[0 10]
 NumMFs=3
-MF1='mf1':'trimf',[0 0 0.2]
-MF2='mf2':'trimf',[0.1 0.5 0.9]
-MF3='mf3':'trimf',[0.8 1 1]
+MF1='few':'trimf',[0 0 1.5]
+MF2='some':'trimf',[-0.5 1 1.5]
+MF3='lots':'trapmf',[0.5 2 10 10]
 
 [Input3]
 Name='bras_y'
-Range=[0 1]
+Range=[0 10]
 NumMFs=3
-MF1='mf1':'trimf',[0 0 0.2]
-MF2='mf2':'trimf',[0.1 0.5 0.9]
-MF3='mf3':'trimf',[0.8 1 1]
+MF1='few':'trimf',[0 0 1.5]
+MF2='some':'trimf',[-0.5 1 1.5]
+MF3='lots':'trapmf',[0.5 2 10 10]
 
 [Input4]
 Name='bras_z'
-Range=[0 1]
+Range=[0 10]
 NumMFs=3
-MF1='mf1':'trimf',[0 0 0.2]
-MF2='mf2':'trimf',[0.1 0.5 0.9]
-MF3='mf3':'trimf',[0.8 1 1]
+MF1='few':'trimf',[0 0 1.5]
+MF2='some':'trimf',[-0.5 1 1.5]
+MF3='lots':'trapmf',[0.5 2 10 10]
 
 [Output1]
 Name='chute'
-Range=[0 1]
+Range=[0 10]
 NumMFs=4
 MF1='NFall':'trapmf',[0 0 0.3 0.5]
-MF2='MaybeFall':'trapmf',[0.4 0.6 0.6 1]
+MF2='MaybeFall':'trapmf',[0.4 0.5 0.5 0.6]
 MF3='ProbablyFall':'trapmf',[0.5 0.6 0.6 0.7]
 MF4='Fall':'trapmf',[0.6 0.8 1 1]
 
