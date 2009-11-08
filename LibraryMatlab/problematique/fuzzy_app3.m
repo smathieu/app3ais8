@@ -9,15 +9,27 @@ function fuzzy_app3
     non_falls = fuzzy_get_preprocessed_data(get_non_falls);
 
     % Optimize get_peak_count
-%     data = non_falls(6).Sensor1;
+%     for i = 1:7
+%     data = falls(i).Sensor2;
+%     figure
 %     plot(data)
-%     get_peak_count(data);
+%     
+%     data = non_falls(i).Sensor2;
+%     figure
+%     plot(data)
+% %     get_peak_count(data);
+%     end
     
     falls_count = 0;
     non_falls_count = 0;
     values = non_falls;
     for i = 1:length(values)
         data = values(i);
+%         figure
+%         plot(1:length(data.Sensor2), data.Sensor2, 'r', ...
+%             1:length(data.Sensor3), data.Sensor3, 'b', ...
+%             1:length(data.Sensor5), data.Sensor5, 'g', ...
+%             1:length(data.Sensor6), data.Sensor6, 'y');
         inputs = [ ...
             get_peak_count(data.Sensor2), ...
             get_peak_count(data.Sensor3), ...
