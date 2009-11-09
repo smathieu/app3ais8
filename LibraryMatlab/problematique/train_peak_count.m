@@ -6,11 +6,14 @@ clc
 clear all
 close all
 
+global g_Pc;
+global g_Pm;
+
 %Parameters
-nind = 1000;     % Size of a chromosome population
-Pc = 0.7;      % Crossover probability
-Pm = 0.02;    % Mutation probability
-ngener = 1000;   % Number of generations
+nind = 250;     % Size of a chromosome population
+g_Pc = 0.8;      % Crossover probability
+g_Pm = 0.02;    % Mutation probability
+ngener = 60;   % Number of generations
 n_show = 10;   % Number of generations between showing the progress
 
 
@@ -24,12 +27,18 @@ ef2 = [1, 1, 1, 1, 3, 2, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1, 2, 2];
 ef4 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 2];
 %Non Falls Sensor 2
 enf2 = [6, 2, 3, 5, 2, 1, 1, 4, 1, 3, 3, 1];
+%Non Falls Sensor 3
+enf3 = [2, 1, 0, 3, 3, 1, 1, 4, 2, 1, 1, 1];
 %Non Falls Sensor 4
 enf4 = [2, 2, 3, 5, 1, 1, 1, 3, 1, 2, 4, 1];
+%Non Falls Sensor 5
+enf5 = [3, 2, 0, 3, 3, 1, 2, 3, 2, 4, 1, 5];
+%Non Falls Sensor 6
+enf6 = [3, 2, 0, 4, 1, 0, 2, 1, 2, 3 ,1, 1];
 % v = non_falls;
 % for i = 1:length(v)
 %     figure
-%     plot(1:length(v(i).Sensor4), v(i).Sensor4);
+%     plot(1:length(v(i).Sensor6), v(i).Sensor6);
 % end
 
 data = [];
@@ -42,46 +51,32 @@ end
 for i = 1:length(non_falls)
     data = [data, ...
         struct('Data', non_falls(i).Sensor2, 'ExpectedPeaks', enf2(i)), ...
+        struct('Data', non_falls(i).Sensor3, 'ExpectedPeaks', enf3(i)) ...
         struct('Data', non_falls(i).Sensor4, 'ExpectedPeaks', enf4(i)) ...
+        struct('Data', non_falls(i).Sensor5, 'ExpectedPeaks', enf5(i)) ...
+        struct('Data', non_falls(i).Sensor6, 'ExpectedPeaks', enf6(i)), ...
     ];
 end
-
-% expected_peaks_falls = [1, 1, 1, 1, 3, 2, 1];
-% expected_peaks_nonfalls = [6, 2, 3, 5, 2, 1, 2];
-% 
-% for i = 1:7
-%     data(i) = struct('Data', falls(i).Sensor2, 'ExpectedPeaks', expected_peaks_falls(i));
-% end
-% 
-% for i = 1:7
-%     data(i+7) = struct('Data', non_falls(i).Sensor2, 'ExpectedPeaks', expected_peaks_nonfalls(i));
-% end
-
 
 % Initialize to random values
 fit = zeros(1, nind);
 
-for i = 1 : floor(nind/2)
-    pop(i) =  makeValueStruct(rand, rand*10, rand * 9 + 1, rand * 7 + 3);
-end
-for i = floor(nind/2) : floor(nind/2) + ceil(nind/2)
-    pop(i) =  makeValueStruct(rand*2, rand*20, rand * 40 + 1, rand * 40 + 3);
+for i = 1 : nind
+    pop(i) =  makeValueStruct(rand*20, rand*20, round(rand * 50 + 1), round(rand * 50 + 3));
+    pop(i) = validateIndividual(pop(i));
+    fit(i) = calcIndividualFitness(data, pop(i));
 end
 
 % For all generations
 total_best_fit = 0;
 for m = 1 : (ngener/n_show)
    for i = 1 : n_show
-       for j = 1 : nind
-           pop(j) = validateIndividual(pop(j));
-           fit(j) = calcIndividualFitness(data, pop(j));
-       end
-
        %Keep best of this generation
        [best, best_index] = max(fit);
        current = pop(best_index)
        current_fit = best / length(data)
        current_moy = mean(fit) / length(data)
+       generation = (m-1)*n_show+i
        if total_best_fit < current_fit
            total_best = current;
            total_best_fit = current_fit;
@@ -91,9 +86,16 @@ for m = 1 : (ngener/n_show)
        for j = 1 : nind 
            adam = selectBreeder(pop, fit);
            eve = selectBreeder(pop, fit);
-           newpop(j) = reproduce(adam, eve, Pc, Pm);
+           newpop(j) = reproduce(adam, eve);
        end
-       pop = newpop;
+       
+       % Keep best of parent
+       for j = 1 : nind
+           newpop(j) = validateIndividual(newpop(j));
+           newfit(j) = calcIndividualFitness(data, newpop(j));
+       end
+       
+       [pop, fit] = generate_newpop(pop, fit, newpop, newfit);
        
        
    end
@@ -102,6 +104,29 @@ end
 total_best
 total_best_fit
 
+res = [];
+for i = 1:length(non_falls)
+    data = non_falls(i).Sensor2;
+    val = findpeaks(1:length(data), data, ...
+            total_best.SlopeThreshold, ...
+            total_best.AmpThreshold, ...
+            total_best.SmoothWidth, ...
+            total_best.PeakGroup);
+    res(i) = size(val, 1);
+end
+
+res = res
+enf2 = enf2
+
+function [newpop, newfit] = generate_newpop(pop, fit, newpop, newfit)
+    for i = 1:5
+        [dummy, index] = min(newfit);
+        [p_max, i_max] = max(fit);
+        newpop(index) = pop(i_max);
+        newfit(index) = p_max;
+        fit(i_max) = 0;
+    end
+    
 function out = makeValueStruct(slope, amp, smooth, peak)
     out = struct(...
         'SlopeThreshold', slope, ...
@@ -116,12 +141,12 @@ function fitness = calcFitness(data, valueStruct, expected)
         valueStruct.AmpThreshold, ...
         valueStruct.SmoothWidth, ...
         valueStruct.PeakGroup);
-    count = size(val, 1);
-    error = abs(expected - count);
-    if error == 0
-        fitness = 2;
+    peak_count = size(val, 1);
+    error = abs(expected - peak_count) + 1;
+    if expected == 1 && peak_count == 1
+        fitness = 75;
     else
-        fitness = 1/error;
+        fitness = 100/error;
     end
     
 function fitness = calcIndividualFitness(data, valueStruct)
@@ -147,17 +172,17 @@ function breeder = selectBreeder(pop, fitness)
     end
     breeder = pop(length(pop));
     
-function child = reproduce(adam, eve, Cp, Mp)
-    if rand < Cp
+function child = reproduce(adam, eve)
+%     if rand < Cp
         child = cross(adam, eve);
-    else
+%     else
         %Adam always win on eve
-        child = adam;
-    end
+%         child = adam;
+%     end
     
-    if rand < Mp
-        mutate(child);
-    end
+%     if rand < Mp
+        child = mutate(child);
+%     end
 
 function child = cross(male, female)
     %TODO Change all field?
@@ -169,14 +194,19 @@ function child = cross(male, female)
         );
     
 function val = crossField(input1, input2)
-    const_scale = 10000;
-    bin1 = dec2bin(input1*const_scale);
-    bin2 = dec2bin(input2*const_scale);
-    
-    swap = round(rand * min([length(bin1), length(bin2)]));
-    bin_output = [bin1(1 : swap), bin2(swap + 1 : length(bin2))];
-    
-    val = bin2dec(bin_output)/const_scale;
+    global g_Pc
+    if rand < g_Pc
+        const_scale = 10000;
+        bin1 = dec2bin(input1*const_scale);
+        bin2 = dec2bin(input2*const_scale);
+
+        swap = round(rand * min([length(bin1), length(bin2)]));
+        bin_output = [bin1(1 : swap), bin2(swap + 1 : length(bin2))];
+
+        val = bin2dec(bin_output)/const_scale;
+    else
+        val = input1;
+    end
     
 function child = mutate(ind)
     %TODO Change all field?
@@ -188,14 +218,19 @@ function child = mutate(ind)
         );
     
 function val = mutateField(input)
-    const_scale = 10000;    
-    bin = dec2bin(input*const_scale);
-    
-    swap = max([round(rand * length(bin)), 1]);
-    if bin(swap) == '1'
-        bin(swap) = '0';
-    else
-        bin(swap) = '1';
-    end
+    global g_Pm
+    if rand < g_Pm
+        const_scale = 10000;    
+        bin = dec2bin(input*const_scale);
 
-    val = bin2dec(bin)/const_scale;
+        swap = max([round(rand * length(bin)), 1]);
+        if bin(swap) == '1'
+            bin(swap) = '0';
+        else
+            bin(swap) = '1';
+        end
+
+        val = bin2dec(bin)/const_scale;
+    else
+        val = input;
+    end

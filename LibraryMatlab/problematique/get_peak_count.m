@@ -5,9 +5,9 @@ function count = get_peak_count(data)
 %         j = j
 %         val = findpeaks(1:length(data), data, 0.001, 13, i, j)
 %         end
-
-    %val = findpeaks(1:length(data), data, 0.001, 10, 4, 6);
-    val = findpeaks(1:length(data), data, 1.0096, 0.4426, 4.9287, 3);
-%     val = findpeaks(1:length(data), data, 0.4685, 0.6404, 22.8902, 28.4763);
-    count = size(val, 1);
+%     val = findpeaks(1:length(data), data, 0.3925, 2.2131, 4, 49);
+    
+%       val = findpeaks(1:length(data), data, 0.2196, 1.7053, 5.4120, 29.1707);
+%     count = size(val, 1);
+    count = find_peak2(data, 0.65);
     end
