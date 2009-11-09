@@ -1,0 +1,298 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{alltt}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{fullpage}
+\usepackage{setspace}
+\usepackage{pstricks}
+\usepackage{verbatim}
+\usepackage{comment}
+\usepackage{listing}
+\usepackage{framed}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage[config=altsf]{subfig}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[plainpages=false,pdfpagelabels,hypertexnames=false]{hyperref}
+
+%For pdf selection
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+%%%%% STYLE %%%%%%%
+\topmargin	0in
+\topskip	0in
+\headheight	0in
+\headsep	0in
+\parindent	0in
+\topsep		0in
+\parskip	8pt
+\floatsep	0in
+%%%%%%%%%%%%%%%%%%%%
+
+%%% SETUP HYPERLINK %%%%%
+\hypersetup{
+colorlinks 	= true,
+linkcolor 	= black}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%% COMMANDS %%%%%%%%
+\renewcommand{\labelitemi}{$\bullet$}
+\newcommand{\unit}[1]{\ \mathrm{#1}}
+\newcommand{\degree}{\ensuremath{^\circ}}
+\newcommand{\action}[3]
+{
+\textit{Action}( {#1} ) \\
+\hspace{20pt} PRECOND: {#2} \\
+\hspace{20pt} EFFECT: {#3} \\
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%% PAGE TITRE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{center}
+	\vspace{20pt}
+	\large{\textsc{
+		Rapport joueurs intelligents pour jeux vidéos\\
+	}}
+	\vspace{20pt}
+	\large{\textsc{
+		P10
+	}}
+	\vfill
+	\begin{tabular}{ll}
+	  Michael Janelle-Montcalm & 04 526 123 \\
+	  Martin Provencher &	05 666 488 \\
+	\end{tabular}
+	\vfill
+	Septembre 2009 \\
+	\textbf{Université de Sherbrooke}
+	\vspace{20pt}
+\end{center}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%% TABLE DES MATIÈRES %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{spacing}{0.1}
+\tableofcontents
+\end{spacing}
+\clearpage
+
+\section{Introduction} %Martin
+
+Dans le but de diminuer le coût de développement de jeux, la compagnie UdeSoft a demandé à son département de recherche et développement d'étudier la possibilité de créer des joueurs intelligents (JI) sans planification préétablie de façon à ce qu'ils s'adaptent au déroulement du jeu et démontrent des comportements délibératifs. Ainsi, les plans préétablis difficilement réutilisables entre plusieurs jeux ne seront plus nécessaires. Pour répondre à cette problématique, nous avons implémenté un prototype en Prolog d'un JI afin d'étudier les différentes méthodes de planification provenant de l'intelligence artificielle : espace d'états, partiellement ordonnée, continuelle, replanification et multiagents. Pour implémenter ces méthodes, nous utilisons des algorithmes de recherches non informées (largeur d'abord, profondeur d'abord) ou informées avec heuristique (avare, A*). Donc, nous devons recommander une technique de planification et de recherche avec des preuves à l'appui en se basant sur le jeu BlockBlitz.
+
+\section{Recommandation} %Mike
+
+\subsection{Planification}
+À ce qui à trait à l'algorithme de planification, nous avons implémenté une méthode de planification par espace d'état par chaînage avant. Il s'agit donc de partir du point de départ et d'essayer tous les chemins possibles de façon à arriver à notre but. Une autre solution est d'utiliser du chaînage arrière, donc de démarrer de la fin et de revenir vers le début. Le chaînage arrière converge statistiquement plus rapidement que le chaînage avant. Cependant, dans l'environnement de BlockBlitz, les deux solutions sont équivalentes. Nous aurions pu également implémenter une planification partiellement ordonnée. Il s'agit de supporter la maxime ``diviser pour conquérir'' en donnant ou trouvant des sous-buts à notre but principal. Nous espérons ainsi que les sous-buts seront plus faciles à planifier que le but global. Cela permet également à notre JI de faire des détours avant d'arriver au but global. Cela peut être très utile dans plusieurs jeux.
+
+Entre ces deux techniques, nous recommandons d'utiliser la planification partiellement ordonnée qui permet d'avoir des JI plus intelligent et plus configurable pour chacun des jeux en lui spécifiant certains sous-buts à atteindre.
+
+\subsection{Recherche}
+Pour implémenter l'algorithme de planification, nous devons implémenter un algorithme de recherche pour trouver la solution. Nous avons donc implémenté deux techniques pour les évaluer. La première a été un algorithme de largeur d'abord. Cette technique de recherche non-informée nous permettait d'arriver au but, mais elle demandait beaucoup trop de temps et de mémoire puisqu'elle ne sait pas si elle se dirige dans la bonne direction. Notre deuxième essai était un algorithme avare. Cet algorithme utilise une heuristique pour estimer le coût restant au plan et priorise l'ordre d'évaluation des chemins avec ce résultat. En général, nous observons que notre algorithme propose un bon plan lorsque le but est réalisable. Tel que démontré dans nos tests, il arrive que notre joueur intelligent prenne plus d'actions que le minimum requis, mais les plans sont toujours valides. Cependant, dans quelques cas, notre algorithme ne converge pas assez rapidement vers une solution et manque de mémoire. Pour mitiger cette situation et pouvoir utiliser un joueur dans un vrai jeu, nous pourrions implémenter l'algorithme de recherche A*.
+
+Pour cette raison, nous recommanderions d'implémenter une librairie de recherche avec l'algorithme A*. Ce dernier ressemble beaucoup à l'algorithme avare, mais il tient en compte le coût total du plan, le passé ainsi que l'estimation du coût restant, dans son heuristique. Cela fait en sorte de trouver le chemin idéal et bien souvent, plus rapidement que l'avare. Bien entendu, cette librairie devrait tenir en compte des états répétés pour ne pas tourner en rond. En d'autres termes, l'algorithme ne devrait jamais réévaluer un état déjà visité lors de la recherche.
+
+La librairie A* permettrait d'accélérer grandement le développement des JI pour les jeux de UdeSoft. À la création d'un nouveau jeu, il faudrait générer un ensemble d'actions possibles et leur résultat sur l'état du jeu. Par la suite, il ne suffirait que de créer dynamiquement différents buts par chaque type de JI. Avec ces informations, les JI réagiraient automatiquement à leur état et rempliraient leur but. Cela facilite grandement le développement de nouveaux jeux.
+
+\section{Résultats} %Martin
+%Lors de notre prototype en Prolog pour vérifier les différentes technologies de planification, nous en avons implémenté 2 : BFS et avare. BFS est une recherche de solution non-informée tandis que avare est une recherche informée. Puisque nous sommes capable d'avoir de l'information sur notre environnement et d'avoir un heuristique par rapport à notre but, l'algorithme de avare s'applique mieux puisqu'il converge plus rapidement vers la bonne solution.
+
+\begin{table}
+\centering
+\begin{tabular}{|p{2.1in}|p{2in}|}
+  \hline
+  \includegraphics[scale=0.3]{images/cas_bloc.png} &
+    \includegraphics[scale=0.3]{images/cas_bloc_f.png} \\ \hline
+    \multicolumn{2}{|c|}{take(5), move(5), move(5), drop(1), take(5), move(5), take(5)} \\ \hline
+  \includegraphics[scale=0.3]{images/cas_joueurs.png} &
+    \includegraphics[scale=0.3]{images/cas_joueurs_f.png} \\ \hline
+    \multicolumn{2}{|p{4in}|}{\centering{move(1), move(1), move(1), move(5), move(6), move(3), move(3), move(6), move(5), move(1), move(1), take(1)}} \\ \hline
+  \includegraphics[scale=0.3]{images/cas_memoire.png} & \\ \hline
+    \multicolumn{2}{|c|}{move(5) x 98, take(5)} \\ \hline
+\end{tabular}
+\caption{Tests réussis}
+\label{tbl:cas_fonctionnel}
+\end{table}
+
+Notre algorithme avare génère un bon plan dans la majorité des situations. Nous vous en présentons deux relativement complexes et une très dangereuse au niveau de la mémoire dans le tableau \ref{tbl:cas_fonctionnel}. Le plan généré dans les trois cas est le plan optimal et il est généré rapidement (moins de 1 seconde). Cependant, nous avons identifié deux cas pour lesquels notre implémentation avare ne fonctionne pas. Pour le premier cas (figure \ref{fig:bug_but}), notre joueur tente d'aller chercher le bloc 13 qui est entouré de 3 joueurs. Puisqu'aucune action possible ne permet à notre JI de pouvoir aller chercher le bloc, il n'y a pas de solution. À cause de la grandeur de la carte, notre JI manque de mémoire avant d'avoir essayé toutes les possibilités. Pour protéger cette erreur, il faudrait s'assurer que le but donné à l'algorithme de recherche soit toujours atteignable. Dans le deuxième cas (figure \ref{fig:bug_avare}), nous identifions une limitation à l'algorithme avare. Dans ce cas, notre heuristique est la distance entre notre JI et le bloc 13. Puisque cette heuristique a la même valeur après que le JI se soit déplacé vers le nord-ouest ou qu'il suive les joueurs à l'ouest, notre JI va essayer toutes les possibilités à l'ouest parce que l'ouest est prioritaire sur le nord-ouest dans notre implémentation. Notre JI manque donc de mémoire avant de revenir au cas du mouvement au nord-ouest. En ayant plus de mémoire, nous obtiendrions la solution, mais elle serait très longue à identifier. D'un autre côté, si nous avions implémenté un algorithme A*, nous aurions trouvé le résultat très rapidement puisque le nombre d'actions effectuées est tenu en compte dans l'heuristique de cet algorithme. Cela ferait en sorte que le déplacement au nord-ouest deviendrait plus prioritaire que les mouvements à l'ouest après quelques essais.
+
+\begin{figure}
+  \centering
+  \subfloat[But inatteignable]{\label{fig:bug_but}\includegraphics[scale=0.3]{images/bug2.png}}
+  \hspace*{0.5in}
+  \subfloat[Erreur avare]{\label{fig:bug_avare}\includegraphics[scale=0.3]{images/bug1.png}}
+  \caption{Tests non-fonctionnels}
+  \label{fig:bug}
+\end{figure}
+
+%avare vs BFS
+%Liens images situation => plan (plusieurs cas différents)
+\section{ADL des actions possibles} %Martin
+
+\begin{tabular}{p{2.2in} p{3.8in} }
+    Bloc(bloc) & bloc est un bloc? \\[10pt]
+    Contient(case, objet) & L'objet que contient la case (Bloc, Joueur, Rien) \\[10pt]
+    Joueur(joueur) & joueur est un joueur? \\[10pt]
+    Nous & Notre joueur intelligent \\[10pt]
+    Position(object, x, y) & Position de l'objet en x, y \\[10pt]
+    Possede(joueur, objet) & L'objet qu'un joueur possède (Bloc, Rien) \\[10pt]
+    TrouverCase(case, direction) & La case dans la direction (1 à 8) à partir de la position courante du joueur. Si la case est hors de la surface de jeu, la fonction retourne faux. \\[10pt]
+    Rien & Ni un joueur, ni un bloc \\[10pt]
+\end{tabular}
+
+
+$\forall case, objet$ $Contient(case, objet) \wedge \neg(Bloc(objet)) \wedge \neg(Joueur(objet)) \Rightarrow Libre(case)  \\$
+
+\action {$None$}{}{}
+
+\action {$Move(direction)$}
+        {$TrouverCase(case, direction) \wedge Libre(case)$}
+        {$Position(case, x, y) \wedge Position(Nous, x, y)$}
+
+Take a 2 préconditions : lorsque nous possédons un bloc et lorsque nous n'en possédons pas.
+
+\action {$Take(direction)$}
+        {$TrouverCase(case, direction) \wedge Contient(case, blocCase) \wedge Bloc(blocCase) \wedge Possede(Nous, blocNous) \wedge Bloc(blocNous)$}
+        {$ Contient(case, blocNous)) \wedge Possede(Nous, blocCase)$}
+
+\action {$Take(direction)$}
+        {$TrouverCase(case, direction) \wedge Contient(case, blocCase) \wedge Bloc(blocCase) \wedge Possede(Nous, blocNous) \wedge \neg Bloc(blocNous)$}
+        {$Contient(case, Rien) \wedge Possede(Nous, blocCase)$}
+
+\action {$Drop(direction)$}
+        {$Libre(case) \wedge Possede(Nous, blocNous) \wedge Bloc(blocNous)$}
+        {$Contient(case, blocNous) \wedge Possede(Nous, Rien)$}
+
+Dans le jeu réel, il y a une probabilité de réussite de l'attaque, mais dans la confection du plan, nous supposons que l'attaque est toujours une réussite.
+
+\action {$Attack(direction)$}
+        {$TrouverCase(case, direction) \wedge Contient(case, joueur) \wedge Joueur(joueur) \wedge Possede(joueur, blocJoueur) \wedge Bloc(blocJoueur) \wedge Possede(Nous, objetNous)$}
+        {$Possede(Nous, blocJoueur) \wedge Possede(joueur, objetNous)$}
+
+\section{Explication JI}
+\subsection{Logique du premier ordre} %Mike
+La logique de notre programme s'articule en deux parties principales. D'abord,
+la définition d'un but pour notre joueur, selon l'état actuel du jeu et les
+conditions gagnantes du jeu. Ensuite, il faut effectuer la recherche de plan
+et trouver une suite d'actions qui vont accomplir notre but. Cette section
+décrit en logique du premier ordre les conditions que nous avons programmées.
+\subsubsection{But}
+Nous avons trois buts possibles pour notre joueur intelligent. D'abord, si le
+bloc le plus important est libre, nous cherchons à aller le prendre. Ensuite,
+si le meilleur bloc est pris, nous voulons attaquer son possesseur. Finalement,
+si nous possédons le meilleur bloc, nous nous sauvons dans le coin en haut à
+gauche du jeu.
+
+$\forall joueur, bloc, \neg(Possede(joueur, bloc)) \Rightarrow BlocLibre(bloc)$ \\
+\\
+$BlocLibre(MeilleurBloc) \Rightarrow But(Take)$ \\
+\\
+$\neg BlocLibre(MeilleurBloc) \wedge \neg (Possede(Nous, MeilleurBloc)) \Rightarrow But(Attack)$ \\
+\\
+$\neg BlocLibre(MeilleurBloc) \wedge Possede(Nous, MeilleurBloc) \Rightarrow But(Flee)$ \\
+
+Pour valider qu'un plan atteint le but qu'il s'est fixé, nous nous assurons que
+la dernière action du plan va mener à un état de réussite. Dans le cas d'une attaque,
+nous devons attaquer à partir d'une case adjacente à la cible. Dans le cas d'une
+prise de bloc, nous devons prendre le bloc à partir d'une case adjacente. Le cas de
+la fuite est moins efficace dans notre solution, puisqu'il consiste à bouger dans
+n'importe quelle direction.
+\\
+% But accompli
+$Possede(Nous, MeilleurBloc) \Rightarrow ButAccompli(Take)$ \\
+\\
+$Possede(Nous, MeilleurBloc) \Rightarrow ButAccompli(Attack)$ \\
+\\
+$\forall plan, direction, ProchaineAction(plan, move(direction)) \Rightarrow ButAccompli(Flee)$\\
+
+\subsubsection{Planification}
+Pour la planification, nous utilisons un algorithme de recherche informée pour
+générer les plans. Nous utilisons un algorithme avare basé sur la distance vers la cible.
+Une file d'attente à priorité contient les prochains états à essayer, ainsi que la
+liste d'actions qui amène à cet état à partir de l'état initial. Un ensemble d'états
+connus est construit pour éviter de faire des actions qui n'amènent pas dans un
+nouvel état.
+
+% Qu'est-ce qu'un état?
+Voici la définition d'un état du jeu. En somme, nous indiquons qu'un état de jeu possède le nombre de joueurs, le nombre de blocs, le nombre de colonnes, le nombre de rangées, une liste de joueurs ainsi qu'une liste de blocs disponibles. Nous supposons ici que la représentation d'un joueur montre son nom, sa position ainsi que le bloc qu'il possède. De manière semblable, la représentation d'un bloc libre indique sa valeur et sa position.
+$ \forall etat, \exists nombreJoueurs, nombreBlocs, grandeurX, grandeurY, listeJoueurs, listeBlocs $ \\
+$ Etat(etat) \Rightarrow $ \\
+$ Nombre(nombreJoueurs) \wedge Nombre(nombreBlocs) \wedge Nombre(grandeurX) $ \\
+$ Nombre(grandeurY) \wedge ListeDe(listeJoueurs, Joueur) \wedge ListeDe(listeBlocs, Bloc) $ \\
+$ Contient(etat, nombreJoueurs, nombreBlocs, grandeurX, grandeurY, listeJoueurs, listeBlocs) $ \\
+\\ % TODO : Mettre tous les Contient avec des wedge
+
+% Element de file (donner la structure)
+Voici la définition d'un élément de la file d'attente. Nous désirons montrer que l'élément est la concaténation de trois informations : la priorité de ce noeud, l'état du jeu à ce point et la liste d'actions qui ont été accomplies sur l'état initial pour arriver à l'état actuel.
+$ \forall listeAttente, elementDeLaFile, \exists priorite, etat, listeActions $ \\
+$ ListeAttente(listeAttente) \wedge EstDansLaFile(elementDeLaFile, listeAttente) $ \\
+$ \wedge Nombre(priorite) \wedge Etat(etat) \wedge ListeDe(listeActions, Action) $ \\
+$ \Rightarrow Contient(elementDeLaFile, priorite) \wedge Contient(elementDeLaFile, etat) $ \\
+$ \wedge Contient(elementDeLaFile, listeActions) $ \\
+\\
+
+Voici la génération de l'état suivant à partir d'une action. Nous supposons que le prédicat AppliqueEffets permet de montrer qu'un état actuel peut effectuer l'action et arriver dans l'état suivant. \\
+$ \forall etatActuel, action, \exists etatSuivant,  $ \\
+$ Environnement(etatActuel) \wedge ActionValide(action, etatActuel) \wedge Environnement(etatSuivant), $ \\
+$ \Rightarrow AppliqueEffets(etatActuel, action, etatSuivant) $ \\
+\\
+
+Fonctionnement de l'algorithme de recherche avare: \\
+Cas 1 : lorsque la solution a été trouvée \\
+$ \forall file, etatsConnus, but, \exists priorite, etatActuel, listeActions$ \\
+$ FileDAttenteAPriorite(file) \wedge EnsembleEnvironnement(etatsConnus) \wedge But(but) \wedge  $ \\
+$ PremierDeFile(file, priorite, etatActuel, listeActions) \wedge EtatAccompliBut(etatActuel, but)  \Rightarrow $ \\
+$ Solution(listeActions)$ \\
+\\
+Cas 2 : lorsque la solution n'est pas trouvée \\
+$ \forall file, etatsConnus, but, \exists priorite, etatActuel, listeActions, listeElementFile $ \\
+$ FileDAttenteAPriorite(file) \wedge EnsembleEnvironnement(etatsConnus) \wedge But(but) \wedge  $ \\
+$ PremierDeFile(file, priorite, etatActuel, listeActions) \wedge \neg (EtatAccompliBut(etatActuel, but))  \Rightarrow $ \\
+$ GenereEtatsSuivants(etatActuel, listeActions, listeElementFile)  $ \\
+$ \wedge ListeDe(nouveauxElementFile, ElementFile) \wedge Ajout(etatActuel, etatsConnus) $ \\
+$ \wedge Ajout(listeElementFile, file) \wedge \neg (Solution(listeActions)) $ \\
+
+Une solution représente une liste d'actions qui, lorsqu'appliquée sur l'état initial, amène à un état ou le but est accompli.
+$ \forall listeAction, etatActuel, but, \exists etatSortie $ \\
+$ But(but) \wedge Etat(etatActuel) \wedge ListeDe(listeAction, Action) $ \\
+$ \wedge AppliqueListeEffets(etatActuel, listeAction, etatSortie) $ \\
+$ \wedge Etat(etatSortie) \wedge EtatAccompliBut(etatSortie, but) $ \\
+$ \Rightarrow Solution(listeAction) $ \\
+
+\subsection{Prolog} %Martin
+
+Notre prototype Prolog défini plusieurs prédicats :
+
+\begin{description}
+  \item[findObjective] Ce prédicat trouve où est le meilleur bloc et nous donne l'action à effectuer pour aller le chercher ou ``flee'' si nous sommes en possession du meilleur bloc.
+  \item[possibleNextMoves] Ce prédicat retourne la liste d'action possible à partir de la position actuelle.
+  \item[moveResult] Ce prédicat donne la nouvelle coordonnée après un déplacement dans la direction voulue à partir de la coordonné actuelle.
+  \item[validMove] Ce prédicat retourne vrai le mouvement testé est valide.
+  \item[applyMove] Ce prédicat applique un mouvement sur un état et retourne l'état final
+  \item[goalAccomplished] Ce prédicat vérifie s'il est possible d'atteindre le but à partir de l'état actuel.
+  \item[getNextStatesListGreedy] Ce prédicat crée la liste des états suivants qui peuvent être atteints à partir de l'état actuel et associe à chacun de ses états la liste complète d'actions à effectuer à partir du début pour l'atteindre.
+  \item[greedyMemberSet] Ce prédicat vérifie si deux états sont équivalents.
+  \item[makePlanGreedy] Ce prédicat reçoit un but et trouve le plan pour atteindre ce but avec l'algorithme avare.
+\end{description}
+
+\section{Recommandation planification évoluée} %Mike
+
+Dans les techniques de planification évoluées, il nous est proposé trois solutions : planification continuelle, replanification et planification multiagents. La planification continuelle consiste à avoir un but final et générer des buts ainsi que des sous-buts et replanifier une fois qu'un but ou un sous-but est atteint. Pour cette raison, il s'utilise très bien avec une planification partiellement ordonnée. Cette technique permet donc de faire un JI vivant continuellement dans l'environnement. La replanification, quant à elle, réagit lorsqu'une erreur survient lors de l'exécution du plan originel. Il a alors le choix de générer un nouveau plan à partir de l'état actuel ou de planifier un détour pour revenir sur le plan. La première solution demande, bien évidemment, plus de temps de calcul que la deuxième. Finalement, la planification multiagent consiste à tenir en compte tous les joueurs dans le même environnement que nous. Si ces joueurs sont dans la même équipe que nous, nous allons utiliser une planification coopérative où nous devons communiquer et nous synchroniser sur un plan commun. D'un autre côté, si les joueurs sont contre nous, nous devons utiliser de la planification compétitive où nous prévoyons les mouvements possibles des autres et nous ajustons notre plan en conséquence.
+
+Il est difficile de recommander une solution universelle. Par exemple, prenons un jeu de tir à la première personne en milieu urbain. Pour la population de la ville, nous devrions utiliser de la planification continue puisqu'ils doivent vivre sans arrêt dans la ville. Si nous devons développer plusieurs JI indépendants, nous devrions utiliser de la replanification pour utiliser le moins de temps de processeur et de mémoire possible. Cependant, si nous prenons l'objectif de tuer des adversaires et survivre, en équipe ou non, nous devrions implémenter une planification multiagent pour avoir un JI tenant en compte le plus de variables possible. Il est bien entendu que la technique la plus complète est la planification multiagent, mais dans bien des cas, elle demandera trop de ressource pour ce dont nous avons réellement besoin. Donc, si nous devions choisir une seule technique, nous choisirions la replanification puisqu'elle est la plus portable entre différents jeux et elle demande moins de ressources processeur et mémoire.
+
+\section{Conclusion}
+
+Suite à notre étude, nous pouvons voir plusieurs avantages et inconvénients aux méthodes proposées. Premièrement, les JI sont beaucoup plus dynamiques que si nous avions des plans préétablis, mais ils demandent plus de mémoire et de temps de calcul. Deuxièmement, pour limiter le temps de recherche de solution et avoir des résultats pratiques , nous devons utiliser un algorithme avare ou A*. Troisièmement, les techniques de planification avancées sont très utiles pour avoir un JI plus performant, mais pour des questions de coûts d'exécution, la replanification est la plus intéressante même si ce n'est pas la plus complète. Finalement, nous avons réussi à implémenter un JI autonome en peu de temps dans l'environnement simple de BlockBlitz. Ce JI répond à toutes les conditions posées. Il est autonome, s'adapte à un très grand nombre de solutions, agit de façon logique et réagit aux erreurs pouvant survenir lors de l'exécution de son plan.
+
+\end{document}
