@@ -85,7 +85,7 @@ linkcolor 	= black}
 
 \section{Analyse des données} % Steven
 % Similitudes entre les canaux (redondance entre 1 et 6, on garde 6)
-% Valeurs des maxima et minima sont plus grandes lors d'une chute que lors 
+% Valeurs des maxima et minima sont plus grandes lors d'une chute que lors
 % d'une non-chute
 
 \section{Hypothèses simplificatrices}
@@ -99,6 +99,10 @@ linkcolor 	= black}
 
 \subsection{Logique floue}
 
+Au niveau de l'algorithme de logique floue, nous avons commencé par éliminer un capteur au complet. Premièrement, ce choix permet de diminuer le coût du système. Deuxièmement, utiliser les trois axes des deux capteurs augmentent de façon drastique le nombre de règles à écrire et alourdi presque inutilement le système. Pour le choix du capteur, nous avons choisit le capteur sous le bras puisqu'en général, il y a de plus grandes variations sur ce capteur.
+
+Pour le traitement des données, nous n'utilisons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Par la suite, nous utilisons l'équation : $||max|-|min||$. Cette équation permet de déterminer la différence des accélérations positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou aucune chute n'a eu lieu. Donc, il y a 3 entrées à notre algorithme de logique floue. 
+
 \subsection{Réseau de neurones} % Steven
 % Schéma-bloc du système
 % Extraction des caractéristiques (max, min)
@@ -107,6 +111,54 @@ linkcolor 	= black}
 \section{Mise en oeuvre}
 
 \subsection{Logique floue}
+
+\begin{figure}
+    \centering
+    \subfigure[Axe X]{
+        \label{fig:f_xi}
+        \fbox{\includegraphics[scale=0.2]{images/f_sensor4.png}}}
+    \quad
+    \subfigure[Axe Y]{
+        \label{fig:f_yi}
+        \fbox{\includegraphics[scale=0.2]{images/f_sensor5.png}}}
+    
+    \subfigure[Axe Z]{
+        \label{fig:f_zi}
+        \fbox{\includegraphics[scale=0.2]{images/f_sensor6.png}}}
+        
+    \caption{Équations entrées de l'algorithme de logique floue}
+    \label{fig:f_input}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{images/f_chute.png}
+\caption{Équation de sortie (chute) de l'algorithme de logique floue}
+\label{fig:f_output}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfigure[Axe X : petit]{
+        \label{fig:f_x_petit}
+        \includegraphics[scale=0.35]{images/f_s4_petit.png}}
+    \quad
+    \subfigure[Axe X : moyen]{
+        \label{fig:f_x_moyen}
+        \includegraphics[scale=0.35]{images/f_s4_moyen.png}}
+    \quad
+    \subfigure[Axe X : grand]{
+        \label{fig:f_x_grand}
+        \includegraphics[scale=0.35]{images/f_s4_grand.png}}
+
+    \caption{Règles de l'algorithme de logique floue}
+    \label{fig:f_rule}
+\end{figure}
+
+Pour implémenter cette solution, il a fallu tout d'abord déterminer la fuzzification des variables d'entrées. Ces équations
+se retrouve à la figure \ref{fig:f_input}. Les valeurs varient entre 0 et 100 puisqu'après analyse des résultats, nous avons conclu que les valeurs obtenues seront toujours dans cet intervalle. Nous avons choisi d'utiliser trois fonctions d'appartenance par entrée puisque cela représentait bien notre domaine. Par la suite, nous avons déterminé la défuzzification du système avec quatre fonctions d'appartenance affichées à la figure \ref{fig:f_output}. Nous avons choisit plus de fonctions d'appartenance pour la sortie de façon à être plus précis lors de l'écriture des règles. Finalement, nous avons défini nos règles tel que présenté à la figure \ref{fig:f_rule}. Nous avons choisit de garder les combinaisons de variables standards : le AND pour combiner les entrées, le OR pour combiner les sortie et le centroïde pour avoir la valeur finale du système.
+
+Une fois l'algorithme de logique floue configuré, il faut identifier à partir de quelle valeur de sortie nous considérons l'entrée comme étant une chute. Pour se faire, nous avons testé plusieurs valeurs de seuil autour de 0.5 avec tous les échantillons en entrée pour trouver un seuil idéal à 0.42.
 
 \subsection{Réseau de neurones} % Mike
 % Données d'entraînement (sujet 5)
@@ -121,30 +173,30 @@ linkcolor 	= black}
 \subsection{Algorithme génétique}
 
 Originalement, nous voulious utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
-Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute, si il en contient aucun, il 
-ne s'agît pas d'une chute. Si il en contient plusieurs, il s'agit d'une récupération de chute. 
+Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute, si il en contient aucun, il
+ne s'agît pas d'une chute. Si il en contient plusieurs, il s'agit d'une récupération de chute.
 
 Pour détecter un pique, nous utilisions une librairie matlab trouvé sur internet. La fonction de détection de pique
-possède 4 paramètres permettant de contrôller quel points du graphique sont détectés comme étant des piques. 
+possède 4 paramètres permettant de contrôller quel points du graphique sont détectés comme étant des piques.
 
 Comme ces paramètre peuvents prendrent une très grand quantité de valuers, il s'agissait d'un cas intéressant ou utiliser
-un algorithme génétique pour trouver les valeurs optimales. 
+un algorithme génétique pour trouver les valeurs optimales.
 
 La première étape de la mise en oueuvre fut de manuellement se créer des données d'entrainement. Nous avons donc manuellement
-observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de pique. 
+observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de pique.
 
-Armé de ces données, nous avons ensuite définit une fonction de pertinence qui permet de calculer la distance une données est de 
-la valeur réel. 
+Armé de ces données, nous avons ensuite définit une fonction de pertinence qui permet de calculer la distance une données est de
+la valeur réel.
 
 Nous avons ensuite définit une population d'individu qui se composait d'un ensemble de valeurs représentent les paramètre des la
-fonction qui trouve les piques. 
+fonction qui trouve les piques.
 
-La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération. Après 
-observation, nous avons conclus qu'il était mieux de conserver les individus d'un génération dans la prochaine. Nous gardons donc les 
-cinq individus les mieux adapter. 
+La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération. Après
+observation, nous avons conclus qu'il était mieux de conserver les individus d'un génération dans la prochaine. Nous gardons donc les
+cinq individus les mieux adapter.
 
 Le choix des individus qui se reproduisent est fait à l'aide d'une fonction aléatoire pondéré de façon a ce que les individus possèdant
-des meilleurs gènes aillent une meilleur probabilité de se reproduire. 
+des meilleurs gènes aillent une meilleur probabilité de se reproduire.
 
 Le speudo code de notre algorithme est:
 
@@ -164,6 +216,10 @@ FOR n generation
 
 \subsection{Logique floue}
 
+Tout d'abord, notre algorithme de logique a un taux de détection de 88.5\% : 92\% de reconnaissance de chute et 85\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
+
+En guise de comparaison, nous avons également essayé l'algorithme de logique floue avec seulement les axes Y et Z du capteur 2. Cette implémentation nous donne, à un seuil de 0.40, 83.5\% de détection : 79\% de reconnaissance de chute et 88\% de reconnaissance de non-chute. En temps de calcul, cette solution prend entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, puisque les données sont déjà disponibles sans augmentation des coûts en argent ou en temps, il est plus avantageux d'utiliser le système avec les 3 axes.
+
 \subsection{Réseau de neurones} % Mike
 % Taux d'identification (avec explications des variations selon les paramètres)
 % Performance avec les données d'entraînement, puis les données de test
@@ -171,10 +227,10 @@ FOR n generation
 
 \subsection{Algorithme génétique}
 
-Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assé optmiale. 
+Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assé optmiale.
 
-Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions 
-s'est avérer insufisente pour être capable de détecter les pics correctement dans les données que nous avions. 
+Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions
+s'est avérer insufisente pour être capable de détecter les pics correctement dans les données que nous avions.
 
 % Martin est-ce que tu peux comléter avec les paramètre utilisé pour entrainer l'algo et le nombre de générations nécessaires.
 % Tu n'as pas commiter ces infos sur git.
