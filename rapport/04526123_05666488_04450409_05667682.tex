@@ -122,7 +122,10 @@ linkcolor 	= black}
 
 Originalement, nous voulions utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
 Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute, si il en contient aucun, il 
-ne s'agît pas d'une chute. Si il en contient plusieurs, il s'agit d'une récupération de chute. 
+ne s'agît pas d'une chute. S’il en contient plusieurs, il s'agit d'une récupération de chute. 
+
+Éventuellement, cette solution fut rejetée en faveur d'une solution offrant de meilleurs résultats, mais nous 
+présentons tout de même l'implémentation et les conclusions tiré de cette expérience.
 
 Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre une chute et une récupération de chute.
 
@@ -133,7 +136,6 @@ Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre un
 \caption{Nombre de piques pour une chute}
 \end{figure}
 
-
 \begin{figure}[htp]
 \centering
 \includegraphics{image/piques_nonchute.png}
@@ -142,30 +144,32 @@ Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre un
 \end{figure}
 
 
+Pour détecter un pique, nous utilisions une librairie matlab trouvée sur internet. La fonction de détection de pique
+possède 4 paramètres permettant de contrôler, quels points du graphique sont détectés comme étant des piques. 
 
-Pour détecter un pique, nous utilisions une librairie matlab trouvé sur internet. La fonction de détection de pique
-possède 4 paramètres permettant de contrôller quel points du graphique sont détectés comme étant des piques. 
+Comme ces paramètres peuvent prendrent une très grande quantité de valeurs, il s'agissait d'un cas intéressant ou utiliser
+un algorithme génétique pour trouver des valeurs optimisées. Il est à noter qu'un algorithme génétique ne retourne pas 
+nécessairement la solution optimale, mais bien une solution possible. 
 
-Comme ces paramètre peuvents prendrent une très grand quantité de valeurs, il s'agissait d'un cas intéressant ou utiliser
-un algorithme génétique pour trouver les valeurs optimales. 
+La première étape de la mise en oeuvre fut de manuellement se créer des données d'entrainement. Nous avons donc 
+observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de piques. 
 
-La première étape de la mise en oueuvre fut de manuellement se créer des données d'entrainement. Nous avons donc manuellement
-observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de pique. 
+Armée de ces données, nous avons ensuite défini une fonction de pertinence qui permet de calculer la distance à laquelle 
+une donnée est de la valeur réelle. 
 
-Armé de ces données, nous avons ensuite définit une fonction de pertinence qui permet de calculer la distance une données est de 
-la valeur réel. 
-
-Nous avons ensuite définit une population d'individu qui se composait d'un ensemble de valeurs représentent les paramètre des la
+Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représente les paramètres de la
 fonction qui trouve les piques. 
 
-La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération. Après 
-observation, nous avons conclus qu'il était mieux de conserver les individus d'un génération dans la prochaine. Nous gardons donc les 
-cinq individus les mieux adapter. 
+La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération. 
+Lors de la reproduction et de la mutation, il existe une probabilité que des gènes soient transférés d'un parent à l'enfant et une
+probabilité qu'un gène mute. On peut optimiser la vitesse de convergence de l'algorithme en modifiants ces probabilités. Après 
+expérimentation, nous avons conclu qu'il était mieux de conserver les individus les plus adaptés d'une génération dans la prochaine. 
+Nous gardons donc les cinq individus les mieux adaptés. 
 
-Le choix des individus qui se reproduisent est fait à l'aide d'une fonction aléatoire pondéré de façon a ce que les individus possèdant
-des meilleurs gènes aillent une meilleur probabilité de se reproduire. 
+Le choix des individus qui se reproduisent est fait à l'aide d'une fonction aléatoire pondéré de façon à ce que les individus possédant
+de meilleurs gènes aient une meilleure probabilité de se reproduire. 
 
-Le speudo code de notre algorithme est:
+Le pseudo-code de notre algorithme est:
 
 \begin{verbatim}
 pop = InitPopulation
@@ -190,12 +194,12 @@ FOR n generation
 
 \subsection{Algorithme génétique}
 
-Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assé optmiale. 
+Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapidement vers une solution suffisamment optimale. 
 
 Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions 
-s'est avérer insufisente pour être capable de détecter les pics correctement dans les données que nous avions. 
+s'est avérée insuffisante pour détecter les pics correctement dans les données que nous avions. 
 
-Nous avons manuellement ajusté les paramètre de l'algorithme génétique. À chaque itération, nous modfions les paramètres pour 
+Nous avons manuellement ajusté les paramètres de l'algorithme génétique. À chaque itération, nous modifions les paramètres pour 
 améliorer les résultats. Les résultats étaient obtenus à l'aide de la fonction de la fonction de pertinence. 
 
 \begin{table}[h]
@@ -215,11 +219,11 @@ améliorer les résultats. Les résultats étaient obtenus à l'aide de la fonct
   \end{center}
 \end{table}
 
-Nous avons aussi modifier la fonction de pertinence pour quelle attribut une plus grande valeure au graphiques ayant plus que un pic. 
-Nous avons dû faire cette optimisation car trop de graphiques avait un seul sommet, ce qui permettait a notre algorithme d'avoir une bonne
-performance en identificant 1 sommet pour tous les graphiques.
+Nous avons aussi modifié la fonction de pertinence pour quel attribut une plus grande valeur aux graphiques ayant plus qu’un pic. 
+Nous avons dû faire cette optimisation, car trop de graphiques avaient un seul sommet, ce qui permettait a notre algorithme d'avoir une bonne
+performance en identifiant 1 sommet pour tous les graphiques.
 
-Les résultats obtenus sont affiché dans la table \ref{tab:genparam}.
+Les résultats obtenus sont affichés dans la table \ref{tab:genparam}.
 
 \begin{table}[h]
   \begin{center}
@@ -236,16 +240,16 @@ Les résultats obtenus sont affiché dans la table \ref{tab:genparam}.
         PeakGroup & 24.1062 \\
         \hline
     \end{tabular}
-    \caption{Paramètres trouvé à l'aide de l'algorithme génétique}
+    \caption{Paramètres trouvés à l'aide de l'algorithme génétique}
     \label{tab:genparam}
   \end{center}
 \end{table}
 
 Avec ces données, nous obtenons une pertinence de 62.3438.
 
-Au niveau du temps d'exécution, l'exécution d'une fonction génétique nécésite beaucoup de temps de processeur. Par contre, il est a noté que 
+Au niveau du temps d'exécution, l'exécution d'une fonction génétique nécessite beaucoup de ressources. Par contre, il est à noter que 
 cette quantité de travail est bien moindre que celle nécessaire avec un algorithme plus conventionnel. Aussi, pour notre application, nous n'avons
-qu'a rouler une fois l'algorithme pour obtenir les paramètre optimisés. Une fois ces paramètres obtenues, nous pouvons les réutiliser a chaque exécution.
+qu'a rouler une fois l'algorithme pour obtenir les paramètres optimisés. Une fois ces paramètres obtenus, nous pouvons les réutiliser à chaque exécution.
 
 \section{Observations et perspectives futures}
 
