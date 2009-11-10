@@ -94,6 +94,7 @@ linkcolor 	= black}
 
 \subsection{Réseau de neurones} % Mike
 % Utilisation seulement des max et min permet d'identifier les chutes
+Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a une chute ou non, peu importe le type de celle-ci. En effet, il s'agit du mandat de base de la problématique. Nous avons utilisé les données découpées telles que fournies dans les échantillons, donc nous nous simplifions la tâche en ne faisant pas de traitement en temps réel. De plus, nous simplifions nos données en entrée en omettant les lectures du capteur 1, étant donné qu'elles sont redondantes avec celles du capteur 6 mais moins significatives. Tel que présenté dans la section d'analyse des données, le maximum et le minimum du signal sont des informations qui semblent suffisantes pour pouvoir détecter l'occurence d'une chute.
 
 \section{Représentation de l'information}
 
@@ -113,10 +114,12 @@ linkcolor 	= black}
 % Description de l'évolution du réseau (époques)
 % Paramètres d'entraînement (momentum, learning rate)
 % Ne converge pas toujours
-% – Loi d’apprentissage, nombre d’unités cachées, nombre d’unités de sortie a expérimenter ;
+% – Loi d’apprentissage, nombre d’unités cachées, nombre d’unités de sortie à expérimenter ;
 % – Critères d’entraînement et d’évaluation ;
 % – Création des ensembles d’entraînement et de test en lien avec l’apprentissage ;
 % – Critère de classification et de reconnaissance.
+
+Afin de réaliser notre réseau de neurones, nous avons utilisé les données du sujet 5 comme données d'entraînement et les données du sujet 3 comme données de test. Nous en avons décidé ainsi puisque nous obtenions une meilleure détection avec ces ensembles. 
 
 \subsection{Algorithme génétique}
 
@@ -152,7 +155,7 @@ Le speudo code de notre algorithme est:
 pop = InitPopulation
 
 FOR n generation
-  fitenesses = CalculateFitnesses pop
+  fitnesses = CalculateFitnesses pop
   breeders = SelectBreeders pop
   pop = Reproduce breeders
   pop = Mutate pop
@@ -171,9 +174,9 @@ FOR n generation
 
 \subsection{Algorithme génétique}
 
-Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assé optmiale. 
+Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assez optimale. 
 
-Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions 
+Malheureusement, trouver le nombre de pics dans une fonction n'est pas un problème simple. La librairie que nous utilisions 
 s'est avérer insufisente pour être capable de détecter les pics correctement dans les données que nous avions. 
 
 % Martin est-ce que tu peux comléter avec les paramètre utilisé pour entrainer l'algo et le nombre de générations nécessaires.
