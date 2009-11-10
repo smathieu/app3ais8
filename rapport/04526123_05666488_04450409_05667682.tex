@@ -65,8 +65,8 @@ linkcolor 	= black}
 	\begin{tabular}{ll}
       Simon Mathieu & 04 450 409 \\
       Steven Denis & 05 667 682 \\
-	  Michael Janelle-Montcalm & 04 526 123 \\
-	  Martin Provencher &	05 666 488 \\
+      Michael Janelle-Montcalm & 04 526 123 \\
+      Martin Provencher &	05 666 488 \\
 	\end{tabular}
 	\vfill
 	Novembre 2009 \\
@@ -101,7 +101,7 @@ linkcolor 	= black}
 
 Au niveau de l'algorithme de logique floue, nous avons commencé par éliminer un capteur au complet. Premièrement, ce choix permet de diminuer le coût du système. Deuxièmement, utiliser les trois axes des deux capteurs augmentent de façon drastique le nombre de règles à écrire et alourdi presque inutilement le système. Pour le choix du capteur, nous avons choisit le capteur sous le bras puisqu'en général, il y a de plus grandes variations sur ce capteur.
 
-Pour le traitement des données, nous n'utilisons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Par la suite, nous utilisons l'équation : $||max|-|min||$. Cette équation permet de déterminer la différence des accélérations positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou aucune chute n'a eu lieu. Donc, il y a 3 entrées à notre algorithme de logique floue. 
+Pour le traitement des données, nous n'utilisons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Par la suite, nous utilisons l'équation : $||max|-|min||$. Cette équation permet de déterminer la différence des accélérations positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou aucune chute n'a eu lieu. Donc, il y a 3 entrées à notre algorithme de logique floue.
 
 \subsection{Réseau de neurones} % Steven
 % Schéma-bloc du système
@@ -121,11 +121,11 @@ Pour le traitement des données, nous n'utilisons que deux valeurs par axe de ca
     \subfigure[Axe Y]{
         \label{fig:f_yi}
         \fbox{\includegraphics[scale=0.2]{images/f_sensor5.png}}}
-    
+
     \subfigure[Axe Z]{
         \label{fig:f_zi}
         \fbox{\includegraphics[scale=0.2]{images/f_sensor6.png}}}
-        
+
     \caption{Équations entrées de l'algorithme de logique floue}
     \label{fig:f_input}
 \end{figure}
@@ -172,39 +172,62 @@ Une fois l'algorithme de logique floue configuré, il faut identifier à partir 
 
 \subsection{Algorithme génétique}
 
-Originalement, nous voulious utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
+Originalement, nous voulions utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
 Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute, si il en contient aucun, il
-ne s'agît pas d'une chute. Si il en contient plusieurs, il s'agit d'une récupération de chute.
+ne s'agît pas d'une chute. S’il en contient plusieurs, il s'agit d'une récupération de chute.
 
-Pour détecter un pique, nous utilisions une librairie matlab trouvé sur internet. La fonction de détection de pique
-possède 4 paramètres permettant de contrôller quel points du graphique sont détectés comme étant des piques.
+Éventuellement, cette solution fut rejetée en faveur d'une solution offrant de meilleurs résultats, mais nous
+présentons tout de même l'implémentation et les conclusions tiré de cette expérience.
 
-Comme ces paramètre peuvents prendrent une très grand quantité de valuers, il s'agissait d'un cas intéressant ou utiliser
-un algorithme génétique pour trouver les valeurs optimales.
+Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre une chute et une récupération de chute.
 
-La première étape de la mise en oueuvre fut de manuellement se créer des données d'entrainement. Nous avons donc manuellement
-observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de pique.
+\begin{figure}[htp]
+\centering
+\includegraphics{images/piques_chute.png}
+\caption{Nombre de piques pour une chute}
+\label{fig:chute}
+\end{figure}
 
-Armé de ces données, nous avons ensuite définit une fonction de pertinence qui permet de calculer la distance une données est de
-la valeur réel.
+\begin{figure}[htp]
+\centering
+\includegraphics{images/piques_nonchute.png}
+\caption{Nombre de piques pour une non-chute}
+\label{fig:nonchute}
+\end{figure}
 
-Nous avons ensuite définit une population d'individu qui se composait d'un ensemble de valeurs représentent les paramètre des la
+
+Pour détecter un pique, nous utilisions une librairie matlab trouvée sur internet. La fonction de détection de pique
+possède 4 paramètres permettant de contrôler, quels points du graphique sont détectés comme étant des piques.
+
+Comme ces paramètres peuvent prendrent une très grande quantité de valeurs, il s'agissait d'un cas intéressant ou utiliser
+un algorithme génétique pour trouver des valeurs optimisées. Il est à noter qu'un algorithme génétique ne retourne pas
+nécessairement la solution optimale, mais bien une solution possible.
+
+La première étape de la mise en oeuvre fut de manuellement se créer des données d'entrainement. Nous avons donc
+observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de piques.
+
+Armée de ces données, nous avons ensuite défini une fonction de pertinence qui permet de calculer la distance à laquelle
+une donnée est de la valeur réelle.
+
+Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représente les paramètres de la
 fonction qui trouve les piques.
 
-La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération. Après
-observation, nous avons conclus qu'il était mieux de conserver les individus d'un génération dans la prochaine. Nous gardons donc les
-cinq individus les mieux adapter.
+La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération.
+Lors de la reproduction et de la mutation, il existe une probabilité que des gènes soient transférés d'un parent à l'enfant et une
+probabilité qu'un gène mute. On peut optimiser la vitesse de convergence de l'algorithme en modifiants ces probabilités. Après
+expérimentation, nous avons conclu qu'il était mieux de conserver les individus les plus adaptés d'une génération dans la prochaine.
+Nous gardons donc les cinq individus les mieux adaptés.
 
-Le choix des individus qui se reproduisent est fait à l'aide d'une fonction aléatoire pondéré de façon a ce que les individus possèdant
-des meilleurs gènes aillent une meilleur probabilité de se reproduire.
+Le choix des individus qui se reproduisent est fait à l'aide d'une fonction aléatoire pondéré de façon à ce que les individus possédant
+de meilleurs gènes aient une meilleure probabilité de se reproduire.
 
-Le speudo code de notre algorithme est:
+Le pseudo-code de notre algorithme est:
 
 \begin{verbatim}
 pop = InitPopulation
 
 FOR n generation
-  fitenesses = CalculateFitnesses pop
+  fitenesses = CalculateFitness pop
   breeders = SelectBreeders pop
   pop = Reproduce breeders
   pop = Mutate pop
@@ -227,13 +250,62 @@ En guise de comparaison, nous avons également essayé l'algorithme de logique f
 
 \subsection{Algorithme génétique}
 
-Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assé optmiale.
+Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapidement vers une solution suffisamment optimale.
 
 Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions
-s'est avérer insufisente pour être capable de détecter les pics correctement dans les données que nous avions.
+s'est avérée insuffisante pour détecter les pics correctement dans les données que nous avions.
 
-% Martin est-ce que tu peux comléter avec les paramètre utilisé pour entrainer l'algo et le nombre de générations nécessaires.
-% Tu n'as pas commiter ces infos sur git.
+Nous avons manuellement ajusté les paramètres de l'algorithme génétique. À chaque itération, nous modifions les paramètres pour
+améliorer les résultats. Les résultats étaient obtenus à l'aide de la fonction de la fonction de pertinence.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular} {|l|l|}
+        \hline
+        Nombre de génération & 60 \\
+        \hline
+        Nombre de chromosones & 250 \\
+        \hline
+        Probabilité de crossover & 0.8 \\
+        \hline
+        Probabilité de mutation & 0.02 \\
+        \hline
+    \end{tabular}
+    \caption{Paramètres de l'algorithme génétique}
+  \end{center}
+\end{table}
+
+Nous avons aussi modifié la fonction de pertinence pour quel attribut une plus grande valeur aux graphiques ayant plus qu’un pic.
+Nous avons dû faire cette optimisation, car trop de graphiques avaient un seul sommet, ce qui permettait a notre algorithme d'avoir une bonne
+performance en identifiant 1 sommet pour tous les graphiques.
+
+Les résultats obtenus sont affichés dans la table \ref{tab:genparam}.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular} {|l|l|}
+        \hline
+        \bf{Paramètre} & \bf{Valeur} \\
+        \hline
+        SlopeThreshold & 2.1067 \\
+        \hline
+        AmpThreshold & 3.2950 \\
+        \hline
+        SmoothWidth & 1.2083 \\
+        \hline
+        PeakGroup & 24.1062 \\
+        \hline
+    \end{tabular}
+    \caption{Paramètres trouvés à l'aide de l'algorithme génétique}
+    \label{tab:genparam}
+  \end{center}
+\end{table}
+
+Avec ces données, nous obtenons une pertinence de 62.3438.
+
+Au niveau du temps d'exécution, l'exécution d'une fonction génétique nécessite beaucoup de ressources. Par contre, il est à noter que
+cette quantité de travail est bien moindre que celle nécessaire avec un algorithme plus conventionnel. Aussi, pour notre application, nous n'avons
+qu'a rouler une fois l'algorithme pour obtenir les paramètres optimisés. Une fois ces paramètres obtenus, nous pouvons les réutiliser à chaque exécution.
 
 \section{Observations et perspectives futures}
 
