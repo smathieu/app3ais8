@@ -19,7 +19,9 @@ n_show = 10;   % Number of generations between showing the progress
 
 
 falls = fuzzy_get_preprocessed_data(get_falls);
+falls = falls(1:5:length(falls));
 non_falls = fuzzy_get_preprocessed_data(get_non_falls);
+non_falls = non_falls(1:5:length(non_falls));
 
 %Falls Sensor 2
 ef2 = [1, 1, 1, 1, 3, 2, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1, 2, 2];
