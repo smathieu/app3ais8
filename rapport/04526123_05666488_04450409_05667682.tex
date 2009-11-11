@@ -85,11 +85,7 @@ linkcolor 	= black}
 La chute chez les personnes agées représente une cause importante d'hospitalisation chez ce groupe de personnes. C'est pour cette raison que le Centre de recherche sur le vieillissement de l'Institut de gériatrie de l'Université de Sherbrooke tente de mettre sur pied un système de détection de chutes. Pour ce faire, ce Centre nous a demandé de réaliser une étude de faisabilité qui évalue plusieurs techniques d'intelligence artificielle capable d'identifier l'occurence d'une chute. Le rapport qui suit présentera l'analyse des données effectuée avant le traitement et l'étude des techniques d'intelligence artifielle. À la suite de l'analyse, nous verrons les hypothèses simplificatrices que nous avons établies pour évaluer chacune des techniques. Ensuite, il y aura une représentation de l'information, la mise en oeuvre, et l'évaluation des différentes techniques à l'étude. Pour terminer, nous noterons les observations effectuées ainsi que les perspectives futures.
 
 \section{Analyse des données} % Steven
-Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fourni pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurence d'une chute.
-
-% Similitudes entre les canaux (redondance entre 1 et 6, on garde 6)
-% Valeurs des maxima et minima sont plus grandes lors d'une chute que lors
-% d'une non-chute
+Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fourni pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurence d'une chute. Lors de cette analyse, nous avons remarqué qu'il y avait une très grande similitude entre les canaux 1 et 6 et que les valeurs du canal 6 sont plus significatives. Une autre observation que nous avons fait lors de l'analyse des données est que les valeurs des maximums et des minimums sont plus grandes lors d'une chute que lors d'une non-chute.
 
 \section{Hypothèses simplificatrices}
 
@@ -127,10 +123,18 @@ Pour le traitement des données, nous commençons par réduire l'échantillonnag
 \end{table}
 
 \subsection{Réseau de neurones} % Steven
-
 % Schéma-bloc du système
 % Extraction des caractéristiques (max, min)
 % Entrées et sorties (fichiers de données, sorties du script)
+
+Afin de réaliser notre réseau de neurones, nous avons décidé de prendre seulement les maximums et les minimums de chaque canal comme entrée du système. Par conséquent, cela diminue énormément le nombre d'entrées donné au système et simplifie les calculs. Une fois que les maximums et les minimums sont extraits des signaux originaux, nous utilisons les neurones afin de déterminer s'il s'agit d'une chute ou non.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{images/NN.png}
+\caption{Représentation graphique du réseau de neurones}
+\label{fig:NN}
+\end{figure}
 
 \section{Mise en oeuvre}
 
@@ -329,9 +333,9 @@ Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapi
 Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions
 s'est avérée insuffisante pour détecter les pics correctement dans les données que nous avions.
 
-Nous avons manuellement ajusté les paramètres de l'algorithme génétique, tel que la probabilité de mutation et le nombre de génération. 
+Nous avons manuellement ajusté les paramètres de l'algorithme génétique, tel que la probabilité de mutation et le nombre de génération.
 La validité des résultats étaient vérifier à l'aide de la fonction de la fonction de pertinence. Plus la fonction de pertinence retourne
-une haute valeure, plus l'individu est aptes a survivre. 
+une haute valeure, plus l'individu est aptes a survivre.
 
 \begin{table}[h]
   \begin{center}
