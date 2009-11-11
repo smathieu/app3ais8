@@ -1,0 +1,13 @@
+Auteurs:
+  Simon Mathieu(04 450 409)
+  Steven Denis (05 667 682)
+  Michael Janelle-Montcalm (04 526 123 )
+  Martin Provencher (05 666 488)
+
+Les fichiers suivants contiennent des fonctions, portant le même nom que le fichier, pouvant être appelé sans paramètre pour démonter la fonctionnalités des différentes solutions implémentées.
+
+call_nn_app3.m - Point d'entré pour l'exécution de la solution utilisant un réseau neural.
+fuzzy_app3.m - Point d'entré pour l'exécution de la solution utilisant de la logique flou.
+train_peak_count.m - Point d'entré pour l'exécution du code d'optimisation utilisant l'algorithme génétique.
+
+Les répertoires Sujet_3 et Sujet_5 contiennent les donnés de la problématique.
