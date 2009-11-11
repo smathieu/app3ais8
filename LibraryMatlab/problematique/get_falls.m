@@ -1,4 +1,8 @@
 function falls_data = get_falls()
+% Get an array of all falls
+% Output :
+% falls_data : Array of falls
+
     falls_data = [];
     falls = [...
         '3ITB1A'; ...

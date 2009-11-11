@@ -1,4 +1,5 @@
 function data_struct = fuzzy_get_preprocessed_data(data_struct)
+% Transform the data so fuzzy logic can process it
     for i = 1:length(data_struct)
         data_struct(i).Sensor1 = preprocess_data(data_struct(i).Sensor1);
         data_struct(i).Sensor2 = preprocess_data(data_struct(i).Sensor2);
@@ -9,6 +10,12 @@ function data_struct = fuzzy_get_preprocessed_data(data_struct)
     end
 
 function output_data = preprocess_data(data)
+% Preprocess the data
+% Input :
+%   data : Data to preprocess
+% Output :
+%   output_data : Preprocessed data
+
     Fe = 2000;
     f = 20;
 

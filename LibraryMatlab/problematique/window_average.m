@@ -1,4 +1,11 @@
 function data = window_average(x, window_size)
+% Sliding windows average
+% Input :
+%   x : signal
+%   windows_size : Size of the sliding window
+% Output
+%   data : Processed signal
+
     data = x;
     wsize = window_size / 2;
     for i = 1 : wsize

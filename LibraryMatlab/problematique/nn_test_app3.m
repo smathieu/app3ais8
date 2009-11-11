@@ -60,16 +60,7 @@ function errors = nn_test_app3(net)
             ext = sprintf('00%d', j);
             data = load_file('Sujet_3', file, ext);
             data_row = [];
-            % Downsample the signals from channels 2 to 6
             for k=2:6
-%                 length(data(:,k))
-                % Chopping data to the 8000th sample because it is the
-                % smallest sample size
-%                middle_8000 = get_middle_samples(data(:, k), fixed_sample_size);
-%                data_row(1+(k-2)*samples_per_channel:(k-1)*samples_per_channel) = downsample_signal(middle_8000, f, Fe);
-
-                average_start = mean(data(1:500,k));
-                average_end = mean(data(length(data)-500:length(data), k));
                 channel_max = max(data(:,k));
                 channel_min = min(data(:,k));
 
@@ -86,13 +77,7 @@ function errors = nn_test_app3(net)
             ext = sprintf('00%d', j);
             data = load_file('Sujet_3', file, ext);
             cory_data_row = [];
-            % Downsample the signals from channels 2 to 6
             for k=2:6
-                % middle_8000 = get_middle_samples(data(:, k), fixed_sample_size);
-                % cory_data_row(1+(k-2)*samples_per_channel:(k-1)*samples_per_channel) = downsample_signal(middle_8000, f, Fe);
-                
-                average_start = mean(data(1:500,k));
-                average_end = mean(data(length(data)-500:length(data), k));
                 channel_max = max(data(:,k));
                 channel_min = min(data(:,k));
 
@@ -110,14 +95,6 @@ function errors = nn_test_app3(net)
             data_row = [];
             % Downsample the signals from channels 2 to 6
             for k=2:6
-%                 length(data(:,k))
-                % Chopping data to the 8000th sample because it is the
-                % smallest sample size
-%                middle_8000 = get_middle_samples(data(:, k), fixed_sample_size);
-%                data_row(1+(k-2)*samples_per_channel:(k-1)*samples_per_channel) = downsample_signal(middle_8000, f, Fe);
-
-                average_start = mean(data(1:500,k));
-                average_end = mean(data(length(data)-500:length(data), k));
                 channel_max = max(data(:,k));
                 channel_min = min(data(:,k));
 
@@ -134,13 +111,7 @@ function errors = nn_test_app3(net)
             ext = sprintf('00%d', j);
             data = load_file('Sujet_5', file, ext);
             cory_data_row = [];
-            % Downsample the signals from channels 2 to 6
             for k=2:6
-                % middle_8000 = get_middle_samples(data(:, k), fixed_sample_size);
-                % cory_data_row(1+(k-2)*samples_per_channel:(k-1)*samples_per_channel) = downsample_signal(middle_8000, f, Fe);
-                
-                average_start = mean(data(1:500,k));
-                average_end = mean(data(length(data)-500:length(data), k));
                 channel_max = max(data(:,k));
                 channel_min = min(data(:,k));
 
@@ -150,7 +121,7 @@ function errors = nn_test_app3(net)
         end
     end
 
-    testing_data = [S3_data_falls; S3_data_non_falls; S5_data_falls; S5_data_non_falls];
+    testing_data = [S3_data_falls; S5_data_falls; S3_data_non_falls; S5_data_non_falls];
     
     testing_input = testing_data(:, 1:5*num_constants)';
     testing_output = testing_data(:, (5*num_constants)+1:(5*num_constants)+2)';
@@ -185,38 +156,7 @@ function errors = nn_test_app3(net)
     end
     errors = sum(abs(AA-TT));
     
-    errors   % Nombre de vecteurs non appris
-
-function data = load_file(subject, file, fileNumber)
-    path = sprintf('%s/%s/%s_%s.dat', subject, file, file, fileNumber);
-    fid = fopen(path,'r','b');  
-    data = fread(fid,[6,inf],'single')';   % Lecture du fichier binaire
-    fclose(fid);
-        
-
-function data = downsample_signal(x, f, Fe)
-    data_size = size(x, 1);
-    x_fft = fft(x, data_size);
-
-    data = real(ifft(x_fft(1:2*f), round(data_size/Fe*f)));
-
-function data = window_average(x, window_size)
-    data = x;
-    wsize = window_size / 2;
-    for i = 1 : wsize
-        data(i) = mean(x(1):x(i));
-    end
-    for i = wsize+1 : length(x) - wsize
-        data(i) = mean(x(i - wsize: i + wsize));
-    end
-    for i = length(x) - wsize + 1 : length(x)
-        data(i) = mean(x(i : length(x)));
-    end
-
-function data = get_middle_samples(input, amount)
-    l = length(input);
+    errors_falls = sum(abs(AA(1:90)-TT(1:90)));
+    errors_non_falls = sum(abs(AA(91:150)-TT(91:150)));
     
-    start_index = round(l/2 - amount/2) + 1;
-    end_index = round(l/2 + amount/2);
-    
-    data = input(start_index: end_index);
+    display_result(errors_falls, 90, errors_non_falls, 60);
