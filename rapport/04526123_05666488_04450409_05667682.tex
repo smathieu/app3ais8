@@ -314,34 +314,49 @@ La performance de notre algorithme avec les données d'apprentissage est parfait
 Les réseaux de neurones que nous générons obtiennent habituellement de bons taux de détection avec les données de test. Le tableau \ref{tbl:neural_results} montre les taux de réussite, en faisant varier la taille de la couche cachée. Nous observons qu'en général, augmenter le nombre de neurones amène une meilleure détection. Le meilleur réseau que nous avons observé possédait 16 neurones et affichait un taux de reconnaissance de 96\%. Nous n'avons cependant pas opté pour celui-ci puisqu'il a fallu plusieurs essais avec notre système avant de le générer. Aussi, le réseau avec 1 seul neurone a requis plusieurs essais avant de converger. Évidemment, lorsque nous analysons la structure, il apparaît qu'en ayant moins d'unités dans la couche cachée que dans la couche de sortie, nous diminuons les chances de distinguer les sorties. Il est même surprenant que nous ayons pu générer un réseau valide avec cette configuration. Donc, après avoir analysé l'impact du nombre d'unités cachées, nous avons fixé notre forme à 8 neurones.
 \begin{table}
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|p{1in}|p{1.1in}|p{1.1in}|l|}
     \hline
     Nombre de neurones & Reconnaissance chutes & Reconnaissance non-chutes & \% reconnaissance \\ \hline
-    1 & 57\% & 100\% & 74\%  \\ \hline
-    2 & 96\%  & 88\% & 93\% \\ \hline
-    4 & 96\% & 88\% & 93\% \\ \hline
-    8 & 93\% & 98\% & 95\% \\ \hline
-    16 & 94\% & 98\% & 96\% \\ \hline
+    1 & 13\% & 100\% & 48\%  \\ \hline
+    2 & 91\%  & 87\% & 89\% \\ \hline
+    4 & 80\% & 100\% & 90\% \\ \hline
+    8 & 91\% & 97\% & 94\% \\ \hline
+    16 & 87\% & 97\% & 92\% \\ \hline
 \end{tabular}
 \caption{Résultats obtenus sur les données de test pour le réseau de neurones}
 \label{tbl:neural_results}
 \end{table}
 
-L'autre paramètre que nous avons étudié est la quantité et la diversité des données d'apprentissage. Nous avons fait les tests précédents en utilisant les données du sujet 5 comme base pour l'apprentissage. Dans ce test, nous remarquons une meilleure détection en utilisant le sujet 5.
+Un autre paramètre que nous avons étudié est le sujet utilisé pour les données d'apprentissage. Nous avons fait les tests précédents en utilisant les données du sujet 5 comme base pour l'apprentissage. Nous montrons au tableau \ref{tbl:neural_results2} les résultats obtenus en utilisant les deux sujets comme base. À titre d'information, nous avons tenté de mélanger les données des deux sujet pour former notre ensemble d'apprentissage. Il nous a été impossible d'entraîner le réseau de neurones avec ces ensembles puisque celui-ci ne convergeait pas, malgré le fait que nous faisions varier les paramètres du réseau (nombre d'unités cachées, momentum, taux d'apprentissage, etc...).
 
 \begin{table}
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|p{1in}|p{1.1in}|p{1.1in}|p{1.3in}|}
     \hline
     Apprentissage & Reconnaissance chutes & Reconnaissance non-chutes & \% reconnaissance \\ \hline
-    Sujet 3 &  &  &   \\ \hline
+    Sujet 3 & 96\% & 88\% & 92\%  \\ \hline
     Sujet 5 & 93\%  & 98\% & 95\% \\ \hline
-    Sujet 5 + 40\% Sujet 3 &  &  &  \\ \hline
-    60\% Sujet 5 + 60\% Sujet 3 & & & \\ \hline
 \end{tabular}
 \caption{Résultats obtenus en variant les données d'apprentissage, pour 8 unités cachées}
-\label{tbl:neural_results_2}
+\label{tbl:neural_results2}
 \end{table}
+
+Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données. 
+
+\begin{table}
+\centering
+\begin{tabular}{|p{1in}|p{1.1in}|p{1.1in}|p{1.3in}|}
+    \hline
+    Seuil d'entraînement & Reconnaissance chutes & Reconnaissance non-chutes & \% reconnaissance \\ \hline
+    0.1 & 84\% & 100\% & 92\%  \\ \hline
+    0.05 & 87\%  & 97\% & 92\% \\ \hline
+    0.01 & 87\%  & 100\% & 93.5\% \\ \hline
+    0.005 & 89\%  & 90\% & 89.5\% \\ \hline
+\end{tabular}
+\caption{Résultats obtenus en variant le seuil d'apprentissage, pour 8 unités cachées}
+\label{tbl:neural_results3}
+\end{table}
+
 \subsection{Algorithme génétique}
 
 Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapidement vers une solution suffisamment optimale.
