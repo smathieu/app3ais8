@@ -119,7 +119,16 @@ Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a un
 % – Création des ensembles d’entraînement et de test en lien avec l’apprentissage ;
 % – Critère de classification et de reconnaissance.
 
-Afin de réaliser notre réseau de neurones, nous avons utilisé les données du sujet 5 comme données d'entraînement et les données du sujet 3 comme données de test. Nous en avons décidé ainsi puisque nous obtenions une meilleure détection avec ces ensembles. 
+Afin de réaliser notre réseau de neurones, nous avons utilisé les données du sujet 5 comme données d'entraînement et les données du sujet 3 comme données de test. Nous en avons décidé ainsi puisque nous obtenions une meilleure détection avec ces ensembles. De nos échantillons, nous utilisons donc 50\%  de données de test et 50\% de données d'apprentissage.
+
+Pour la réalisation de notre réseau de neurones, nous avons utilisé un algorithme d'entraînement avec rétroprogation de l'erreur. Il s'agit d'un algorithme d'entraînement supervisé qui vise à minimiser l'erreur sur les échantillons d'entraînement. Comme fonction d'erreur, nous avons mis la somme des carrés des différences ($sse$). Par essai et erreur, nous avons trouvé que l'utilisation de 8 unités cachées nous permet de faire converger le système la plupart du temps. Il arrive quand même quelques fois où l'entraînement n'aboutit pas à un système utilisable et nous ne faisons qu'exécuter l'algorithme une nouvelle fois lorsque celà se produit. De manière générale, nous obtenons un graphique d'entraînement qui ressemble à celui présenté à la figure \ref{fig:training_8units}. Nous avons aussi essayé d'utiliser d'autres quantités d'unités cachées, pour voir l'impact de ce paramètre sur le réseau. Nous avons découvert qu'il est possible d'utiliser jusqu'à une vingtaine de neurones. L'augmentation du nombre de neurones amène une convergence plus rapide du système vers les sorties désirées. (Voir les résultats en annexe aux figures \ref{fig:train_1_2}, \ref{fig:train_4_8} et \ref{fig:train_16_24}) L'inconvénient d'augmenter le nombre de neurones est qu'il est plus difficile de faire converger le réseau vers les résultats désirés. Pour 8 neurones, environ un essai sur 10 ne converge pas. Rendu à 24 neurones, il nous a été impossible d'obtenir un réseau utile. Pour détecter une chute, nous regardons si la valeur de la sortie de chute est plus grande que celle de la sortie de non-chute. La reconnaissance s'effectue donc avec la sortie qui a le meilleur score.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{image/training_8units.png}
+    \caption{Réduction de l'erreur par entraînement (8 unités cachées)}
+    \label{fig:training_8units}
+\end{figure}
 
 \subsection{Algorithme génétique}
 
@@ -172,6 +181,39 @@ FOR n generation
 % Performance avec les données d'entraînement, puis les données de test
 % Différence des résultats selon le nombre d'unités cachées
 
+La performance de notre algorithme avec les données d'apprentissage est parfaite. Ceci est dû au fait que nous fixons un seuil global d'erreur sur les données de test d'une valeur de 0.1. L'entraînement de notre réseau se termine lorsque la somme des carrés des erreurs de chaque sortie est sous ce seuil pour l'ensemble des données d'apprentissage, ce qui assure que toutes les données d'apprentissage sont bien identifiées.
+
+Les réseaux de neurones que nous générons obtiennent habituellement de bons taux de détection avec les données de test. Le tableau \ref{tbl:neural_results} montre les taux de réussite, en faisant varier la taille de la couche cachée. Nous observons qu'en général, augmenter le nombre de neurones amène une meilleure détection. Le meilleur réseau que nous avons observé possédait 16 neurones et affichait un taux de reconnaissance de 96\%. Nous n'avons cependant pas opté pour celui-ci puisqu'il a fallu plusieurs essais avec notre système avant de le générer. Aussi, le réseau avec 1 seul neurone a requis plusieurs essais avant de converger. Évidemment, lorsque nous analysons la structure, il apparaît qu'en ayant moins d'unités dans la couche cachée que dans la couche de sortie, nous diminuons les chances de distinguer les sorties. Il est même surprenant que nous ayons pu générer un réseau valide avec cette configuration. Donc, après avoir analysé l'impact du nombre d'unités cachées, nous avons fixé notre forme à 8 neurones.
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    Nombre de neurones & Reconnaissance chutes & Reconnaissance non-chutes & \% reconnaissance \\ \hline
+    1 & 57\% & 100\% & 74\%  \\ \hline
+    2 & 96\%  & 88\% & 93\% \\ \hline
+    4 & 96\% & 88\% & 93\% \\ \hline
+    8 & 93\% & 98\% & 95\% \\ \hline
+    16 & 94\% & 98\% & 96\% \\ \hline
+\end{tabular}
+\caption{Résultats obtenus sur les données de test pour le réseau de neurone}
+\label{tbl:neural_results}
+\end{table}
+
+L'autre paramètre que nous avons étudié est la quantité et la diversité des données d'apprentissage. Nous avons fait les tests précédents en utilisant les données du sujet 5 comme base pour l'apprentissage. Dans ce test, nous remarquons une meilleure détection en utilisant le sujet 5.
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    Apprentissage & Reconnaissance chutes & Reconnaissance non-chutes & \% reconnaissance \\ \hline
+    Sujet 3 &  &  &   \\ \hline
+    Sujet 5 & 93\%  & 98\% & 95\% \\ \hline
+    Sujet 5 + 40\% Sujet 3 &  &  &  \\ \hline
+    60\% Sujet 5 + 60\% Sujet 3 & & & \\ \hline
+\end{tabular}
+\caption{Résultats obtenus en variant les données d'apprentissage, pour 8 unités cachées}
+\label{tbl:neural_results}
+\end{table}
 \subsection{Algorithme génétique}
 
 Dans notre cas, l'algorithme générique nous a permis de converger assé rapidement vers une solution assez optimale. 
@@ -183,5 +225,37 @@ s'est avérer insufisente pour être capable de détecter les pics correctement 
 % Tu n'as pas commiter ces infos sur git.
 
 \section{Observations et perspectives futures}
+
+\pagebreak
+\section{Annexe}
+
+\subsection{Variation du nombre d'unités cachées}
+Voici les résultats de l'entraînement pour les différents nombres d'unités cachées. Le graphique représente la somme des carrés des différences entre le résultat obtenu et la sortie attendue.
+\begin{figure}
+    \centering
+    \subfloat[Entraînement avec 1 neurone]{\includegraphics[scale=0.40]{image/training_1units.png} \label{fig:training_1units}}
+    \hspace*{0.5in}
+    \subfloat[Entraînement avec 2 neurones]{\includegraphics[scale=0.40]{image/training_2units.png} \label{fig:training_2units}}
+    \caption{Entraînement avec 1 et 2 neurones}
+    \label{fig:train_1_2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat[Entraînement avec 4 neurones]{\includegraphics[scale=0.40]{image/training_4units.png} \label{fig:training_4units}}
+    \hspace*{0.5in}
+    \subfloat[Entraînement avec 8 neurones]{\includegraphics[scale=0.40]{image/training_8units.png} \label{fig:training_8units_annex}}
+    \caption{Entraînement avec 4 et 8 neurones}
+    \label{fig:train_4_8}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat[Entraînement avec 16 neurones]{\includegraphics[scale=0.40]{image/training_16units.png} \label{fig:training_16units}}
+    \hspace*{0.5in}
+    \subfloat[Entraînement avec 24 neurones]{\includegraphics[scale=0.40]{image/training_24units.png} \label{fig:training_24units}}
+    \caption{Entraînement avec 16 et 24 neurones}
+    \label{fig:train_16_24}
+\end{figure}
 
 \end{document}
