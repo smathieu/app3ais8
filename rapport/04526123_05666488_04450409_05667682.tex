@@ -101,7 +101,26 @@ linkcolor 	= black}
 
 Au niveau de l'algorithme de logique floue, nous avons commencé par éliminer un capteur au complet. Premièrement, ce choix permet de diminuer le coût du système. Deuxièmement, utiliser les trois axes des deux capteurs augmentent de façon drastique le nombre de règles à écrire et alourdi presque inutilement le système. Pour le choix du capteur, nous avons choisit le capteur sous le bras puisqu'en général, il y a de plus grandes variations sur ce capteur.
 
-Pour le traitement des données, nous n'utilisons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Par la suite, nous utilisons l'équation : $||max|-|min||$. Cette équation permet de déterminer la différence des accélérations positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou aucune chute n'a eu lieu. Donc, il y a 3 entrées à notre algorithme de logique floue.
+Pour le traitement des données, nous commençons par réduire l'échantillonnage à 20 Hz afin de diminuer le nombre de valeurs avec lesquels travailler. Par la suite, nous ne gardons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Ces valeurs sont combinées avec l'équation : $||max|-|min||$ qui permet de déterminer la différence entre les accélérations maximales positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou qu'aucune chute n'a eu lieu. Cette relation a été identifiée après l'analyse des données. Les valeurs caractéristiques de cette équation pour le capteur choisit se retrouvent au tableau \ref{tbl:f_input_val}.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular} {|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{Valeurs} & \multicolumn{3}{|c|}{\textbf{Chute}} & \multicolumn{3}{|c|}{\textbf{Non-chute}} \\ \cline{2-7}
+         & Axe X & Axe Y & Axe Z & Axe X & Axe Y & Axe Z \\
+        \hline
+        Minimum & 5.8922  & 0.2753  & 0.4199  & 8.2704  & 1.4687  & 0.2828 \\
+        \hline
+        Moyenne & 27.3740 & 20.7519 & 22.7897 & 18.1876 & 8.3666  & 11.9716 \\
+        \hline
+        Maximum & 54.6119 & 61.9975 & 78.1890 & 32.7961 & 17.1413 & 24.1894 \\
+        \hline
+    \end{tabular}
+    \caption{Intervalle de valeurs pour les entrées de l'algorithme de logique floue}
+    \label{tbl:f_input_val}
+  \end{center}
+\end{table}
 
 \subsection{Réseau de neurones} % Steven
 % Schéma-bloc du système
@@ -155,10 +174,15 @@ Pour le traitement des données, nous n'utilisons que deux valeurs par axe de ca
     \label{fig:f_rule}
 \end{figure}
 
-Pour implémenter cette solution, il a fallu tout d'abord déterminer la fuzzification des variables d'entrées. Ces équations
-se retrouve à la figure \ref{fig:f_input}. Les valeurs varient entre 0 et 100 puisqu'après analyse des résultats, nous avons conclu que les valeurs obtenues seront toujours dans cet intervalle. Nous avons choisi d'utiliser trois fonctions d'appartenance par entrée puisque cela représentait bien notre domaine. Par la suite, nous avons déterminé la défuzzification du système avec quatre fonctions d'appartenance affichées à la figure \ref{fig:f_output}. Nous avons choisit plus de fonctions d'appartenance pour la sortie de façon à être plus précis lors de l'écriture des règles. Finalement, nous avons défini nos règles tel que présenté à la figure \ref{fig:f_rule}. Nous avons choisit de garder les combinaisons de variables standards : le AND pour combiner les entrées, le OR pour combiner les sortie et le centroïde pour avoir la valeur finale du système.
+% Plus d'explication sur le mélange des valeurs et d'où vient les règles
 
-Une fois l'algorithme de logique floue configuré, il faut identifier à partir de quelle valeur de sortie nous considérons l'entrée comme étant une chute. Pour se faire, nous avons testé plusieurs valeurs de seuil autour de 0.5 avec tous les échantillons en entrée pour trouver un seuil idéal à 0.42.
+Pour implémenter cette solution avec un algorithme de logique floue, nous devions passer par quatre étapes. En premier lieu, nous avons déterminé la fuzzification des variables d'entrées. Pour choisir les relations entre les différentes fonction d'appartenance, nous avons utilisé les valeurs disponibles au tableau \ref{tbl:f_input_val}. Notre premier choix a été d'utiliser l'intervalle de 0 à 100 afin de s'assurer de considérer toutes les valeurs d'entrée possible. Puis, nous avons choisi d'utiliser trois fonctions d'appartenance par entrée puisque cela représentait bien notre compréhension et notre expertise du domaine. Les résultats se retrouvent à la figure \ref{fig:f_input}.
+
+En deuxième lieu, nous avons déterminé la défuzzification du système. Puisque nous n'avions pas de contrainte sur les valeurs de sorties, nous avons choisit de garder l'intervalle par défaut, de 0 à 1. Nous avons également choisit d'utiliser 4 fonctions d'appartenance pour faciliter l'écriture des règles et les rendre plus représentative. La relation se retrouve à la figure \ref{fig:f_output}.
+
+En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas d'avantage à prioriser un axe plus qu'un autre. Donc, nos règles dépendent du nombre de type d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisit de garder le AND pour combiner les entrée et le OR pour combiner les sorties puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, au niveau de l'aggrégation pour obtenir la valeur finale, nous avons choisit d'utiliser le centroïde puisqu'il s'agit de la valeur par défaut et que nous ne voyions pas l'utilité de la modifier.
+
+En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'une non-chute. Puisque notre sortie varie de 0 à 1, nous avons fait une recherche binaire avec une précision de 2 chiffres après la virgule pour identifier le seuil optimal. Le seuil optimal que nous avons identifier, avec toutes les données fournies, est de 0.42.
 
 \subsection{Réseau de neurones} % Mike
 % Données d'entraînement (sujet 5)
@@ -239,7 +263,7 @@ FOR n generation
 
 \subsection{Logique floue}
 
-Tout d'abord, notre algorithme de logique a un taux de détection de 88.5\% : 92\% de reconnaissance de chute et 85\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
+Tout d'abord, notre algorithme de logique a un taux de détection de 88.5\% : 92\% de reconnaissance de chute et 85\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante compte tenu de notre compréhension et de notre expertise du domaine limité. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
 
 En guise de comparaison, nous avons également essayé l'algorithme de logique floue avec seulement les axes Y et Z du capteur 2. Cette implémentation nous donne, à un seuil de 0.40, 83.5\% de détection : 79\% de reconnaissance de chute et 88\% de reconnaissance de non-chute. En temps de calcul, cette solution prend entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, puisque les données sont déjà disponibles sans augmentation des coûts en argent ou en temps, il est plus avantageux d'utiliser le système avec les 3 axes.
 
