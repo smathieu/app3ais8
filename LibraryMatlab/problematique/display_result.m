@@ -1,4 +1,6 @@
 function display_result(falls_errors, total_falls, non_falls_errors, total_non_falls)
+% Display the output in a human readable manner.
+
     f_falls_count = total_falls - falls_errors;
     f_non_falls_count = falls_errors;
     fprintf('F  : Falls : %d/%d => %d\n', f_falls_count, total_falls, round(f_falls_count/total_falls*100))

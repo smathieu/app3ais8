@@ -1,4 +1,8 @@
 function non_falls_data = get_non_falls()
+% Get an array of all non-falls
+% Output :
+% non_falls_data : Array of non-falls
+
     non_falls_data = [];
     non_falls = [...
         '3ITB1D'; ...
