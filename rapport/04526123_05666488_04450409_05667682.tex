@@ -325,8 +325,9 @@ Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapi
 Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions
 s'est avérée insuffisante pour détecter les pics correctement dans les données que nous avions.
 
-Nous avons manuellement ajusté les paramètres de l'algorithme génétique. À chaque itération, nous modifions les paramètres pour
-améliorer les résultats. Les résultats étaient obtenus à l'aide de la fonction de la fonction de pertinence.
+Nous avons manuellement ajusté les paramètres de l'algorithme génétique, tel que la probabilité de mutation et le nombre de génération. 
+La validité des résultats étaient vérifier à l'aide de la fonction de la fonction de pertinence. Plus la fonction de pertinence retourne
+une haute valeure, plus l'individu est aptes a survivre. 
 
 \begin{table}[h]
   \begin{center}
@@ -371,8 +372,7 @@ Les résultats obtenus sont affichés dans la table \ref{tab:genparam}.
   \end{center}
 \end{table}
 
-Avec ces données, nous obtenons une pertinence de 62.3438.
-
+Avec ces données, nous obtenons une pertinence de 62.3438 où une détection correcte d'un pique vaut 75 sinon elle vaut 100 divisé par l'erreur.
 Au niveau du temps d'exécution, l'exécution d'une fonction génétique nécessite beaucoup de ressources. Par contre, il est à noter que
 cette quantité de travail est bien moindre que celle nécessaire avec un algorithme plus conventionnel. Aussi, pour notre application, nous n'avons
 qu'a rouler une fois l'algorithme pour obtenir les paramètres optimisés. Une fois ces paramètres obtenus, nous pouvons les réutiliser à chaque exécution.
