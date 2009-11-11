@@ -29,24 +29,16 @@ time_mean = mean(time(3:length(time)))
 time_max = max(time(3:length(time)))
 
 
-% % Get %
-% %  for k = 1:20
-% %     threshold = 0.35 + (k-1)/100
-%     threshold = 0.42
-%     
-%     [f_falls_count, f_non_falls_count] = eval_fuzzy(falls, fuzzy_logic_fis, threshold);
-%     [nf_falls_count, nf_non_falls_count] = eval_fuzzy(non_falls, fuzzy_logic_fis, threshold);
-% 
-%     f_total = f_falls_count + f_non_falls_count;
-%     fprintf('F  : Falls : %d/%d => %d\n', f_falls_count, f_total, round(f_falls_count/f_total*100))
-%     fprintf('F  : Non falls : %d/%d => %d\n', f_non_falls_count, f_total, round(f_non_falls_count/f_total*100))
-%     
-%     nf_total = nf_falls_count + nf_non_falls_count;
-%     fprintf('NF : Falls : %d/%d => %d\n', nf_falls_count, nf_total, round(nf_falls_count/nf_total*100))
-%     fprintf('NF : Non falls : %d/%d => %d\n', nf_non_falls_count, nf_total, round(nf_non_falls_count/nf_total*100))
-%     
-%     moy = (round(f_falls_count/f_total*100) + round(nf_non_falls_count/nf_total*100))/2
-% %  end
+% Get %
+%  for k = 1:20
+%     threshold = 0.35 + (k-1)/100
+    threshold = 0.42;
+    
+    [f_falls_count, f_non_falls_count] = eval_fuzzy(falls, fuzzy_logic_fis, threshold);
+    [nf_falls_count, nf_non_falls_count] = eval_fuzzy(non_falls, fuzzy_logic_fis, threshold);
+
+    display_result(f_non_falls_count, f_falls_count + f_non_falls_count, nf_falls_count, nf_falls_count + nf_non_falls_count);
+%  end
 
 function [falls_count, non_falls_count] = eval_fuzzy(values, fuzzy_logic_fis, threshold)
     falls_count = 0;
