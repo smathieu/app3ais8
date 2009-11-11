@@ -183,6 +183,8 @@ En deuxième lieu, nous avons déterminé la défuzzification du système. Puisq
 
 En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas d'avantage à prioriser un axe plus qu'un autre. Donc, nos règles dépendent du nombre de type d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisit de garder le AND pour combiner les entrée et le OR pour combiner les sorties puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, au niveau de l'aggrégation pour obtenir la valeur finale, nous avons choisit d'utiliser le centroïde puisqu'il s'agit de la valeur par défaut et que nous ne voyions pas l'utilité de la modifier.
 
+% Il faut parler de scaled ou clipped
+
 En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'une non-chute. Puisque notre sortie varie de 0 à 1, nous avons fait une recherche binaire avec une précision de 2 chiffres après la virgule pour identifier le seuil optimal. Le seuil optimal que nous avons identifier, avec toutes les données fournies, est de 0.42.
 
 \subsection{Réseau de neurones} % Mike
@@ -209,7 +211,7 @@ Pour la réalisation de notre réseau de neurones, nous avons utilisé un algori
 \subsection{Algorithme génétique}
 
 Originalement, nous voulions utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
-Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute, si il en contient aucun, il
+Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute. S'il en contient aucun, il
 ne s'agît pas d'une chute. S’il en contient plusieurs, il s'agit d'une récupération de chute.
 
 Éventuellement, cette solution fut rejetée en faveur d'une solution offrant de meilleurs résultats, mais nous
@@ -219,23 +221,23 @@ Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre un
 
 \begin{figure}[htp]
 \centering
-\includegraphics{images/piques_chute.png}
+\includegraphics[scale=0.5]{images/piques_chute.png}
 \caption{Nombre de piques pour une chute}
 \label{fig:chute}
 \end{figure}
 
 \begin{figure}[htp]
 \centering
-\includegraphics{images/piques_nonchute.png}
+\includegraphics[scale=0.5]{images/piques_nonchute.png}
 \caption{Nombre de piques pour une non-chute}
 \label{fig:nonchute}
 \end{figure}
 
 
 Pour détecter un pique, nous utilisions une librairie matlab trouvée sur internet. La fonction de détection de pique
-possède 4 paramètres permettant de contrôler, quels points du graphique sont détectés comme étant des piques.
+possède 4 paramètres permettant de contrôler quels points du graphique sont détectés comme étant des piques.
 
-Comme ces paramètres peuvent prendrent une très grande quantité de valeurs, il s'agissait d'un cas intéressant ou utiliser
+Comme ces paramètres peuvent prendrent une très grande quantité de valeurs, il s'agissait d'un cas intéressant où utiliser
 un algorithme génétique pour trouver des valeurs optimisées. Il est à noter qu'un algorithme génétique ne retourne pas
 nécessairement la solution optimale, mais bien une solution possible.
 
@@ -245,8 +247,7 @@ observé les graphiques de la dérivé de certains des capteurs et avons estimé
 Armée de ces données, nous avons ensuite défini une fonction de pertinence qui permet de calculer la distance à laquelle
 une donnée est de la valeur réelle.
 
-Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représente les paramètres de la
-fonction qui trouve les piques.
+Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représentant les paramètres de la fonction qui trouve les piques.
 
 La prochaine étape consiste a faire reproduire et muter les individus de notre population pour produire la prochaine génération.
 Lors de la reproduction et de la mutation, il existe une probabilité que des gènes soient transférés d'un parent à l'enfant et une
