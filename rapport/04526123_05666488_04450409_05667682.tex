@@ -94,7 +94,7 @@ Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué u
 \label{fig:semblable}
 \end{figure}
 
-La ligne bleue représente le canal 1 et la ligne verte représente le canal 6. À partir de ce graphique, nous pouvons déterminer que les valeurs du canal 6 sont plus significatives. Une autre observation que nous avons faite lors de l'analyse des données est que les valeurs des maximums et des minimums sont plus grandes lors d'une chute que lors d'une non-chute. Par exemple, lorsque l'on regarde le graphique \ref{fig:semblable} qui représente une chute, on remarque que les maximums se retrouvent autour de 2.5 alors que dans la figure \ref{fig:non\_chute} qui représente les mêmes canaux lors d'une non-chute, les maximums se retrouvent autour de 1.
+La ligne bleue représente le canal 1 et la ligne verte représente le canal 6. À partir de ce graphique, nous pouvons déterminer que les valeurs du canal 6 sont plus significatives. Une autre observation que nous avons faite lors de l'analyse des données est que les valeurs des maximums et des minimums sont plus grandes lors d'une chute que lors d'une non-chute. Par exemple, lorsque l'on regarde le graphique \ref{fig:semblable} qui représente une chute, on remarque que les maximums se retrouvent autour de 2.5 alors que dans la figure \ref{fig:non_chute} qui représente les mêmes canaux lors d'une non-chute, les maximums se retrouvent autour de 1.
 
 \begin{figure}
 \centering
@@ -111,12 +111,12 @@ Au niveau de l'algorithme de logique floue, notre hypothèse simplificatrice a �
 
 \subsection{Réseau de neurones} % Mike
 % Utilisation seulement des max et min permet d'identifier les chutes
-Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a une chute ou non, peu importe le type de celle-ci. En effet, il s'agit du mandat de base de la problématique. Nous avons utilisé les données découpées telles que fournies dans les échantillons, donc nous nous simplifions la tâche en ne faisant pas de traitement en temps réel. De plus, nous simplifions nos données en entrée en utilisant les observations présentées dans la section d'analyse des données. Le maximum et le minimum du signal sont des informations qui semblent suffisantes pour pouvoir détecter l'occurrence d'une chute.
+Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a une chute ou non, peu importe le type de celle-ci. En effet, il s'agit du mandat de base de la problématique. Nous avons utilisé les données découpées telles que fournies dans les échantillons, donc nous nous simplifions la tâche en ne faisant pas de traitement en temps réel. De plus, nous simplifions nos données en entrée en utilisant les observations présentées dans la section d'analyse des données. Comme le maximum et le minimum du signal sont des informations qui semblent suffisantes pour pouvoir détecter l'occurrence d'une chute, nous prenons les maximums et les minimums des trois canaux du capteur du bras (\#4 à \#6).
 
 \section{Représentation de l'information}
 
 \subsection{Logique floue}
-Pour le traitement des données, nous commençons par réduire l'échantillonnage à 20 Hz afin de diminuer le nombre de valeurs avec lesquels travailler. Par la suite, nous ne gardons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Ces valeurs sont combinées avec l'équation : $||max|-|min||$ qui permet de déterminer la différence entre les accélérations maximales positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou qu'aucune chute n'a eu lieu. Cette relation a été identifiée après l'analyse des données. Les valeurs caractéristiques de cette équation pour le capteur choisi se retrouvent au tableau \ref{tbl:f_input_val}.
+Pour le traitement des données, nous commençons par réduire l'échantillonnage à 20 Hz afin de diminuer le nombre de valeurs avec lequel travailler. Par la suite, nous ne gardons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Ces valeurs sont combinées avec l'équation : $||max|-|min||$ qui permet de déterminer la différence entre les accélérations maximales positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou qu'aucune chute n'a eu lieu. Cette relation a été identifiée après l'analyse des données. Les valeurs caractéristiques de cette équation pour le capteur choisi se retrouvent au tableau \ref{tbl:f_input_val}.
 
 \begin{table}[h]
   \begin{center}
@@ -200,13 +200,13 @@ Afin de réaliser notre réseau de neurones, nous avons décidé de prendre seul
 
 % Plus d'explication sur le mélange des valeurs et d'où vient les règles
 
-Pour implémenter cette solution avec un algorithme de logique floue, nous devions passer par quatre étapes. En premier lieu, nous avons déterminé la fuzzification des variables d'entrées. Pour choisir les relations entre les différentes fonctions d'appartenance, nous avons utilisé les valeurs disponibles au tableau \ref{tbl:f_input_val}. Notre premier choix a été d'utiliser l'intervalle de 0 à 100 afin de s'assurer de considérer toutes les valeurs d'entrée possible. Puis, nous avons choisi d'utiliser trois fonctions d'appartenance par entrée puisque cela représentait bien notre compréhension et notre expertise du domaine. Les résultats se retrouvent à la figure \ref{fig:f_input}.
+Pour implémenter cette solution avec un algorithme de logique floue, nous devions passer par quatre étapes. En premier lieu, nous avons déterminé la fuzzification des variables d'entrées. Pour choisir les relations entre les différentes fonctions d'appartenance, nous avons utilisé les valeurs disponibles au tableau \ref{tbl:f_input_val}. Notre premier choix a été d'utiliser l'intervalle de 0 à 100 afin de s'assurer de considérer toutes les valeurs possibles d'entrée. Puis, nous avons choisi d'utiliser trois fonctions d'appartenance par entrée puisque cela représentait bien notre compréhension et notre expertise du domaine. Les résultats se retrouvent à la figure \ref{fig:f_input}.
 
 En deuxième lieu, nous avons déterminé la défuzzification du système. Puisque nous n'avions pas de contrainte sur les valeurs de sorties, nous avons choisi de garder l'intervalle par défaut, de 0 à 1. Nous avons également choisi d'utiliser 4 fonctions d'appartenance pour faciliter l'écriture des règles et les rendre plus représentatives. La relation se retrouve à la figure \ref{fig:f_output}.
 
-En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas davantage à prioriser un axe plus qu'un autre puisqu'ils sont indépendants. Donc, nos règles dépendent du nombre de types d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisi de garder le AND pour combiner les entrées et le OR pour combiner les valeurs de sortie des règles puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, par essaie erreur, nous avons choisi d'utiliser la mise à l'échelle pour calculer les différentes valeurs de sortie des règles et le centroïde pour calculer le résultat final puisque cette configuration nous donnait de meilleur résultat.
+En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas d'avantage à prioriser un axe plus qu'un autre puisqu'ils sont indépendants. Donc, nos règles dépendent du nombre de types d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisi de garder le AND pour combiner les entrées et le OR pour combiner les valeurs de sortie des règles puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, par essai et erreur, nous avons choisi d'utiliser la mise à l'échelle pour calculer les différentes valeurs de sortie des règles et le centroïde pour calculer le résultat final puisque cette configuration nous donnait de meilleur résultat.
 
-En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'une non-chute. Puisque notre sortie varie de 0 à 1, nous avons fait une recherche binaire avec une précision de 2 chiffres après la virgule pour identifier le seuil optimal qui de 0.42 avec toutes les données fournies.
+En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'une non-chute. Puisque notre sortie varie de 0 à 1, nous avons fait une recherche binaire avec une précision de 2 chiffres après la virgule pour identifier le seuil optimal qui est de 0.42 avec toutes les données fournies.
 
 \subsection{Réseau de neurones} % Mike
 % Données d'entraînement (sujet 5)
@@ -220,7 +220,7 @@ En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'
 
 Afin de réaliser notre réseau de neurones, nous avons utilisé les données du sujet 5 comme données d'entraînement et les données du sujet 3 comme données de test. Nous en avons décidé ainsi puisque nous obtenions une meilleure détection avec ces ensembles. De nos échantillons, nous utilisons donc 50\%  de données de test et 50\% de données d'apprentissage.
 
-Pour la réalisation de notre réseau de neurones, nous avons utilisé un algorithme d'entraînement avec rétroprogation de l'erreur. Il s'agit d'un algorithme d'entraînement supervisé qui vise à minimiser l'erreur sur les échantillons d'entraînement. Comme fonction d'erreur, nous avons mis la somme des carrés des différences ($sse$). Par essai et erreur, nous avons trouvé que l'utilisation de 8 unités cachées nous permet de faire converger le système la plupart du temps. Il arrive quand même quelques fois où l'entraînement n'aboutit pas à un système utilisable et nous ne faisons qu'exécuter l'algorithme une nouvelle fois lorsque cela se produit. De manière générale, nous obtenons un graphique d'entraînement qui ressemble à celui présenté à la figure \ref{fig:training_8units}. Nous avons aussi essayé d'utiliser d'autres quantités d'unités cachées, pour voir l'impact de ce paramètre sur le réseau. Nous avons découvert qu'il est possible d'utiliser jusqu'à une vingtaine de neurones. L'augmentation du nombre de neurones amène une convergence plus rapide du système vers les sorties désirées. (Voir les résultats en annexe aux figures \ref{fig:train_1_2}, \ref{fig:train_4_8} et \ref{fig:train_16_24}) L'inconvénient d'augmenter le nombre de neurones est qu'il est plus difficile de faire converger le réseau vers les résultats désirés. Pour 8 neurones, environ un essai sur 10 ne converge pas. Rendu à 24 neurones, il nous a été impossible d'obtenir un réseau utile. Pour détecter une chute, nous regardons si la valeur de la sortie de chute est plus grande que celle de la sortie de non-chute. La reconnaissance s'effectue donc avec la sortie qui a le meilleur score.
+Pour la réalisation de notre réseau de neurones, nous avons utilisé un algorithme d'entraînement avec rétroprogation de l'erreur. Il s'agit d'un algorithme d'entraînement supervisé qui vise à minimiser l'erreur sur les échantillons d'entraînement. Comme fonction d'erreur, nous avons mis la somme des carrés des différences ($sse$). Par essai et erreur, nous avons trouvé que l'utilisation de 8 unités cachées nous permet de faire converger le système la majorité du temps. Il arrive quand même quelques fois où l'entraînement n'aboutit pas à un système utilisable et nous ne faisons qu'exécuter l'algorithme une nouvelle fois lorsque cela se produit. De manière générale, nous obtenons un graphique d'entraînement qui ressemble à celui présenté à la figure \ref{fig:training_8units}. Nous avons aussi essayé d'utiliser d'autres quantités d'unités cachées, pour voir l'impact de ce paramètre sur le réseau. Nous avons découvert qu'il est possible d'utiliser jusqu'à une vingtaine de neurones. L'augmentation du nombre de neurones amène une convergence plus rapide du système vers les sorties désirées. (Voir les résultats en annexe aux figures \ref{fig:train_1_2}, \ref{fig:train_4_8} et \ref{fig:train_16_24}) L'inconvénient d'augmenter le nombre de neurones est qu'il est plus difficile de faire converger le réseau vers les résultats désirés. Pour 8 neurones, environ un essai sur 20 ne converge pas. Rendu à 24 neurones, il nous a été impossible d'obtenir un réseau utile. Pour détecter une chute, nous regardons si la valeur de la sortie de chute est plus grande que celle de la sortie de non-chute. La reconnaissance s'effectue donc avec la sortie qui a le meilleur score.
 
 \begin{figure}
     \centering
@@ -231,8 +231,8 @@ Pour la réalisation de notre réseau de neurones, nous avons utilisé un algori
 
 \subsection{Algorithme génétique}
 
-Originalement, nous voulions utiliser le nombre de piques dans le graphique de la dérivé pour détecter les chutes.
-Si le graphique d'un capteur contenait un pique, il s'agit probablement d'une chute. S'il n'en contient aucun, il
+Originalement, nous voulions utiliser le nombre de pics dans le graphique de la dérivée pour détecter les chutes.
+Si le graphique d'un capteur contenait un pic, il s'agit probablement d'une chute. S'il n'en contient aucun, il
 ne s'agit pas d'une chute. S’il en contient plusieurs, il s'agit d'une récupération de chute.
 
 Éventuellement, cette solution fut rejetée en faveur d'une solution offrant de meilleurs résultats, mais nous
@@ -243,32 +243,32 @@ Les figures \ref{fig:chute} et \ref{fig:nonchute} montre la différence entre un
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.5]{images/piques_chute.png}
-\caption{Nombre de piques pour une chute}
+\caption{Nombre de pics pour une chute}
 \label{fig:chute}
 \end{figure}
 
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.5]{images/piques_nonchute.png}
-\caption{Nombre de piques pour une non-chute}
+\caption{Nombre de pics pour une non-chute}
 \label{fig:nonchute}
 \end{figure}
 
 
-Pour détecter un pique, nous utilisions une librairie matlab trouvée sur internet. La fonction de détection de pique
-possède 4 paramètres permettant de contrôler quels points du graphique sont détectés comme étant des piques.
+Pour détecter un pic, nous utilisions une librairie matlab trouvée sur internet. La fonction de détection de pic
+possède 4 paramètres permettant de contrôler quels points du graphique sont détectés comme étant des pics.
 
 Comme ces paramètres peuvent prendre une très grande quantité de valeurs, il s'agissait d'un cas intéressant où utiliser
 un algorithme génétique pour trouver des valeurs optimisées. Il est à noter qu'un algorithme génétique ne retourne pas
 nécessairement la solution optimale, mais bien une solution possible.
 
-La première étape de la mise en oeuvre fut de manuellement se créer des données d'entrainement. Nous avons donc
-observé les graphiques de la dérivé de certains des capteurs et avons estimé le nombre de piques.
+La première étape de la mise en oeuvre fut de manuellement se créer des données d'entraînement. Nous avons donc
+observé les graphiques de la dérivée de certains des capteurs et avons estimé le nombre de pics.
 
-Armée de ces données, nous avons ensuite défini une fonction de pertinence qui permet de calculer la distance à laquelle
+Armé de ces données, nous avons ensuite défini une fonction de pertinence qui permet de calculer la distance à laquelle
 une donnée est de la valeur réelle.
 
-Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représentant les paramètres de la fonction qui trouve les piques.
+Nous avons ensuite défini une population d'individu qui se composait d'un ensemble de valeurs représentant les paramètres de la fonction qui trouve les pics.
 
 La prochaine étape consiste à faire reproduire et muter les individus de notre population pour produire la prochaine génération.
 Lors de la reproduction et de la mutation, il existe une probabilité que des gènes soient transférés d'un parent à l'enfant et une
@@ -299,7 +299,7 @@ best = pop(MaxIndex(fitnesses))
 
 \subsection{Logique floue}
 
-Tout d'abord, notre algorithme de logique a un taux de détection de 90\% : 91\% de reconnaissance de chute et 87\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante compte tenu de notre compréhension et de notre expertise du domaine limité. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
+Tout d'abord, notre algorithme de logique a un taux de détection de 90\%, divisé en 91\% de reconnaissance de chute et 87\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante compte tenu de notre compréhension et que notre expertise du domaine est limité. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
 
 En guise de comparaison, nous avons également essayé l'algorithme de logique floue avec seulement les axes Y et Z du capteur 2. Cette implémentation nous donne, à un seuil de 0.40, 83.5\% de détection : 79\% de reconnaissance de chute et 88\% de reconnaissance de non-chute. En temps de calcul, cette solution prend entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, puisque les données sont déjà disponibles sans augmentation des coûts en argent ou en temps, il est plus avantageux d'utiliser le système avec les 3 axes.
 
@@ -308,9 +308,9 @@ En guise de comparaison, nous avons également essayé l'algorithme de logique f
 % Performance avec les données d'entraînement, puis les données de test
 % Différence des résultats selon le nombre d'unités cachées
 
-La performance de notre algorithme avec les données d'apprentissage est parfaite. Ceci est dû au fait que nous fixons un seuil global d'erreur sur les données de test d'une valeur de 0.1. L'entraînement de notre réseau se termine lorsque la somme des carrés des erreurs de chaque sortie est sous ce seuil pour l'ensemble des données d'apprentissage, ce qui assure que toutes les données d'apprentissage sont bien identifiées.
+La performance de notre algorithme avec les données d'apprentissage est parfaite. Ceci est dû au fait que nous fixons un seuil global d'erreur sur les données d'entraînement d'une valeur de 0.1. L'entraînement de notre réseau se termine lorsque la somme des carrés des erreurs de chaque sortie est sous ce seuil pour l'ensemble des données d'apprentissage, ce qui assure que toutes les données d'apprentissage sont bien identifiées.
 
-Les réseaux de neurones que nous générons obtiennent habituellement de bons taux de détection avec les données de test. Le tableau \ref{tbl:neural_results} montre les taux de réussite, en faisant varier la taille de la couche cachée. Nous observons qu'en général, augmenter le nombre de neurones amène une meilleure détection. Le meilleur réseau que nous avons observé possédait 16 neurones et affichait un taux de reconnaissance de 96\%. Nous n'avons cependant pas opté pour celui-ci puisqu'il a fallu plusieurs essais avec notre système avant de le générer. Aussi, le réseau avec 1 seul neurone a requis plusieurs essais avant de converger. Évidemment, lorsque nous analysons la structure, il apparaît qu'en ayant moins d'unités dans la couche cachée que dans la couche de sortie, nous diminuons les chances de distinguer les sorties. Il est même surprenant que nous ayons pu générer un réseau valide avec cette configuration. Donc, après avoir analysé l'impact du nombre d'unités cachées, nous avons fixé notre forme à 8 neurones.
+Les réseaux de neurones que nous générons obtiennent habituellement de bons taux de détection avec les données de test. Le tableau \ref{tbl:neural_results} montre les taux de réussite, en faisant varier la taille de la couche cachée. Nous observons qu'en général, augmenter le nombre de neurones amène une meilleure détection mais demande plus de calculs pour trouver les poids et qu'il est possible que le réseau ne converge pas en 20 000 époques. Le meilleur réseau que nous avons observé possédait 16 neurones et affichait un taux de reconnaissance de 96\%. Nous n'avons cependant pas opté pour celui-ci puisqu'il a fallu plusieurs essais avec notre système avant de le générer. Aussi, le réseau avec 1 seul neurone a requis plusieurs essais avant de converger. Évidemment, lorsque nous analysons la structure, il apparaît qu'en ayant moins d'unités dans la couche cachée que dans la couche de sortie, nous diminuons les chances de bien distinguer les sorties. Il est même surprenant que nous ayons pu générer un réseau valide avec cette configuration. Donc, après avoir analysé l'impact du nombre d'unités cachées, nous avons fixé notre forme à 8 neurones.
 \begin{table}
 \centering
 \begin{tabular}{|p{1.2in}|p{1.3in}|p{1.3in}|l|}
@@ -326,7 +326,7 @@ Les réseaux de neurones que nous générons obtiennent habituellement de bons t
 \label{tbl:neural_results}
 \end{table}
 
-Un autre paramètre que nous avons étudié est le sujet utilisé pour les données d'apprentissage. Nous avons fait les tests précédents en utilisant les données du sujet 5 comme base pour l'apprentissage. Nous montrons au tableau \ref{tbl:neural_results2} les résultats obtenus en utilisant les deux sujets comme base. À titre d'information, nous avons tenté de mélanger les données des deux sujets pour former notre ensemble d'apprentissage. Il nous a été impossible d'entraîner le réseau de neurones avec ces ensembles puisque celui-ci ne convergeait pas, malgré le fait que nous faisions varier les paramètres du réseau (nombre d'unités cachées, momentum, taux d'apprentissage, etc...).
+Un autre paramètre que nous avons étudié est le sujet utilisé pour les données d'apprentissage. Nous avons fait les tests précédents en utilisant les données du sujet 5 comme base pour l'apprentissage. Nous montrons au tableau \ref{tbl:neural_results2} les résultats obtenus en utilisant les deux sujets comme base. À titre d'information, nous avons tenté de mélanger les données des deux sujets pour former notre ensemble d'apprentissage. Il nous a été impossible d'entraîner le réseau de neurones avec ces ensembles puisque celui-ci ne convergeait pas, malgré le fait que nous faisions varier les paramètres du réseau (nombre d'unités cachées, momentum, taux d'apprentissage, etc...). Nous posons l'hypothèse que les données deviennent plus variées et nécessitent un entraînement plus approfondi ou un plus gros nombre d'échantillons. Avec le système actuen, nous supposons que les résultats que nous obtiendrons sur d'autres sujets auront les mêmes taux de reconnaissance. 
 
 \begin{table}
 \centering
@@ -340,7 +340,7 @@ Un autre paramètre que nous avons étudié est le sujet utilisé pour les donn�
 \label{tbl:neural_results2}
 \end{table}
 
-Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données. 
+Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous espérons obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données. 
 
 \begin{table}
 \centering
@@ -360,11 +360,11 @@ Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement
 
 Dans notre cas, l'algorithme générique nous a permis de converger plutôt rapidement vers une solution suffisamment optimale.
 
-Malheureusement, trouver le nombre de piques dans une fonction n'est pas un problème simple. La librairie que nous utilisions
+Malheureusement, trouver le nombre de pics dans une fonction n'est pas un problème simple. La librairie que nous utilisions
 s'est avérée insuffisante pour détecter les pics correctement dans les données que nous avions.
 
 Nous avons manuellement ajusté les paramètres de l'algorithme génétique, tel que la probabilité de mutation et le nombre de générations.
-La validité des résultats étaient vérifier à l'aide de la fonction de la fonction de pertinence. Plus la fonction de pertinence retourne
+La validité des résultats était vérifiée à l'aide de la fonction de pertinence. Plus la fonction de pertinence retourne
 une haute valeur, plus l'individu est apte à survivre.
 
 \begin{table}[h]
@@ -384,9 +384,9 @@ une haute valeur, plus l'individu est apte à survivre.
   \end{center}
 \end{table}
 
-Nous avons aussi modifié la fonction de pertinence pour quel attribut une plus grande valeur aux graphiques ayant plus qu’un pic.
+Nous avons aussi modifié la fonction de pertinence pour qu'elle attribue une plus grande valeur aux graphiques ayant plus qu’un pic.
 Nous avons dû faire cette optimisation, car trop de graphiques avaient un seul sommet, ce qui permettait à notre algorithme d'avoir une bonne
-performance en identifiant 1 sommet pour tous les graphiques.
+performance en identifiant un sommet pour tous les graphiques.
 
 Les résultats obtenus sont affichés dans la table \ref{tab:genparam}.
 
@@ -417,13 +417,13 @@ qu'a rouler une fois l'algorithme pour obtenir les paramètres optimisés. Une f
 
 \section{Observations et perspectives futures}
 
-Nous avons réussi a implémenter une preuve de concepte fonctionnel en utilisant des techniques d'intélligence artificielle tel que les réseaux de neurones et de la logique flou. Les algorithmes génétiques ne se porte bien à ce type de problème directement, mais peuvent être utlisés dans une approche hybride pour optimiser les paramètres utilisés par les autres méthodes.
+Nous avons réussi à implémenter une preuve de concept fonctionnelle en utilisant des techniques d'intelligence artificielle tel que les réseaux de neurones et la logique flou. Les algorithmes génétiques ne se prêtent pas bien à ce type de problème directement, mais peuvent être utlisés dans une approche hybride pour optimiser les paramètres utilisés par les autres méthodes.
 
-À l'aide de la logique flou, nous obtenons une reconnaissance de 89\% et environs 95\% avec un réseau de neuronnes. Il serait possible d'augmenter le taux de reconnaissance en utilisants plus de données d'apprentissage et en optimisants les paramètres.
+À l'aide de la logique floue, nous obtenons une reconnaissance de 89\% et avec un réseau de neurones, 95\%. Il serait possible d'augmenter le taux de reconnaissance en utilisant plus de données d'apprentissage et en optimisant les paramètres.
 
-Une des plus grandes difficultés rencontré est l'identification des paramètres permettant de différentier les chutes des non-chutes. Cela semble être une des plus grandes difficultés lors de l'implémentation d'algorithmes de classification.
+Une des plus grandes difficultés rencontrée est l'identification des paramètres permettant de différentier les chutes des non-chutes. Cela semble être une des plus grandes difficultés lors de l'implémentation d'algorithmes de classification.
 
-Les techniques d'intélligences artificiel, particulièrement les réseaux de neurones, s'applique bien à ce type de problème où il est difficille d'identifier des règles pour effecteur la classification. Ces techniques peuvent être réutiliser pour une multitude de problèmes qui seraient difficile de résoudre à l'aide des méthodes classiques.
+Les techniques d'intelligence artificielle, particulièrement les réseaux de neurones, s'applique bien à ce type de problème où il est difficile d'identifier des règles pour effecteur la classification. Ces techniques peuvent être réutilisées pour une multitude de problèmes qui seraient difficile de résoudre à l'aide des méthodes classiques.
 
 \pagebreak
 \section{Annexe}
