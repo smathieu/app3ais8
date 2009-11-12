@@ -107,6 +107,8 @@ La ligne bleue représente le canal 1 et la ligne verte représente le canal 6. 
 
 \subsection{Logique floue}
 
+Au niveau de l'algorithme de logique floue, notre hypothèse simplificatrice a été d'éliminer un capteur au complet. Premièrement, ce choix permet de diminuer le coût du système. Deuxièmement, utiliser les trois axes des deux capteurs augmentent de façon drastique le nombre de règles à écrire et alourdi presque inutilement le système. Pour le choix du capteur, nous avons choisi le capteur sous le bras puisqu'en général, il y a de plus grandes variations sur ce capteur.
+
 \subsection{Réseau de neurones} % Mike
 % Utilisation seulement des max et min permet d'identifier les chutes
 Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a une chute ou non, peu importe le type de celle-ci. En effet, il s'agit du mandat de base de la problématique. Nous avons utilisé les données découpées telles que fournies dans les échantillons, donc nous nous simplifions la tâche en ne faisant pas de traitement en temps réel. De plus, nous simplifions nos données en entrée en omettant les lectures du capteur 1, étant donné qu'elles sont redondantes avec celles du capteur 6 mais moins significatives. Tel que présenté dans la section d'analyse des données, le maximum et le minimum du signal sont des informations qui semblent suffisantes pour pouvoir détecter l'occurrence d'une chute.
@@ -114,9 +116,6 @@ Dans le cas du réseau de neurones, nous avons décidé de détecter s'il y a un
 \section{Représentation de l'information}
 
 \subsection{Logique floue}
-
-Au niveau de l'algorithme de logique floue, nous avons commencé par éliminer un capteur au complet. Premièrement, ce choix permet de diminuer le coût du système. Deuxièmement, utiliser les trois axes des deux capteurs augmentent de façon drastique le nombre de règles à écrire et alourdi presque inutilement le système. Pour le choix du capteur, nous avons choisi le capteur sous le bras puisqu'en général, il y a de plus grandes variations sur ce capteur.
-
 Pour le traitement des données, nous commençons par réduire l'échantillonnage à 20 Hz afin de diminuer le nombre de valeurs avec lesquels travailler. Par la suite, nous ne gardons que deux valeurs par axe de capteur, le maximum et le minimum de l'échantillon de temps. Ces valeurs sont combinées avec l'équation : $||max|-|min||$ qui permet de déterminer la différence entre les accélérations maximales positives et négatives. Si cette valeur est petite, elle signifie qu'une personne a réussi à appliquer une force équivalente opposée à la chute pour se rattraper ou qu'aucune chute n'a eu lieu. Cette relation a été identifiée après l'analyse des données. Les valeurs caractéristiques de cette équation pour le capteur choisi se retrouvent au tableau \ref{tbl:f_input_val}.
 
 \begin{table}[h]
@@ -205,9 +204,7 @@ Pour implémenter cette solution avec un algorithme de logique floue, nous devio
 
 En deuxième lieu, nous avons déterminé la défuzzification du système. Puisque nous n'avions pas de contrainte sur les valeurs de sorties, nous avons choisi de garder l'intervalle par défaut, de 0 à 1. Nous avons également choisi d'utiliser 4 fonctions d'appartenance pour faciliter l'écriture des règles et les rendre plus représentatives. La relation se retrouve à la figure \ref{fig:f_output}.
 
-En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas davantage à prioriser un axe plus qu'un autre. Donc, nos règles dépendent du nombre de types d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisi de garder le AND pour combiner les entrées et le OR pour combiner les sorties puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, au niveau de l'agrégation pour obtenir la valeur finale, nous avons choisi d'utiliser le centroïde puisqu'il s'agit de la valeur par défaut et que nous ne voyions pas l'utilité de la modifier.
-
-% Il faut parler de scaled ou clipped
+En troisième lieu, nous devions définir nos règles pour lier nos entrées fuzzifiées à nos sorties. Selon notre expertise, nous ne voyions pas davantage à prioriser un axe plus qu'un autre puisqu'ils sont indépendants. Donc, nos règles dépendent du nombre de types d'entrée et non de quel axe la valeur provient. Dans le même ordre d'idée, nous avons choisi de garder le AND pour combiner les entrées et le OR pour combiner les valeurs de sortie des règles puisque selon notre analyse du domaine, les variables sont indépendantes. Finalement, par essaie erreur, nous avons choisi d'utiliser la mise à l'échelle pour calculer les différentes valeurs de sortie des règles et le centroïde pour calculer le résultat final puisque cette configuration nous donnait de meilleur résultat.
 
 En quatrième lieu, il faut déterminer le seuil de détection d'une chute et d'une non-chute. Puisque notre sortie varie de 0 à 1, nous avons fait une recherche binaire avec une précision de 2 chiffres après la virgule pour identifier le seuil optimal qui de 0.42 avec toutes les données fournies.
 
@@ -300,7 +297,7 @@ FOR n generation
 
 \subsection{Logique floue}
 
-Tout d'abord, notre algorithme de logique a un taux de détection de 88.5\% : 92\% de reconnaissance de chute et 85\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante compte tenu de notre compréhension et de notre expertise du domaine limité. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
+Tout d'abord, notre algorithme de logique a un taux de détection de 90\% : 91\% de reconnaissance de chute et 87\% de reconnaissance de non-chute. Nous considérons cette valeur assez élevée pour considérer cette technique satisfaisante compte tenu de notre compréhension et de notre expertise du domaine limité. En plus, l'algorithme prend, pour s'exécuter, entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, nous pourrions facilement implémenter un système de détection de chute à la seconde prêt, en temps réel pour un humain.
 
 En guise de comparaison, nous avons également essayé l'algorithme de logique floue avec seulement les axes Y et Z du capteur 2. Cette implémentation nous donne, à un seuil de 0.40, 83.5\% de détection : 79\% de reconnaissance de chute et 88\% de reconnaissance de non-chute. En temps de calcul, cette solution prend entre 3 et 24 millisecondes avec une moyenne à 9 millisecondes. Donc, puisque les données sont déjà disponibles sans augmentation des coûts en argent ou en temps, il est plus avantageux d'utiliser le système avec les 3 axes.
 
@@ -403,13 +400,13 @@ qu'a rouler une fois l'algorithme pour obtenir les paramètres optimisés. Une f
 
 \section{Observations et perspectives futures}
 
-Nous avons réussi a implémenter une preuve de concepte fonctionnel en utilisant des techniques d'intélligence artificielle tel que les réseaux de neurones et de la logique flou. Les algorithmes génétiques ne se porte bien à ce type de problème directement, mais peuvent être utlisés dans une approche hybride pour optimiser les paramètres utilisés par les autres méthodes. 
+Nous avons réussi a implémenter une preuve de concepte fonctionnel en utilisant des techniques d'intélligence artificielle tel que les réseaux de neurones et de la logique flou. Les algorithmes génétiques ne se porte bien à ce type de problème directement, mais peuvent être utlisés dans une approche hybride pour optimiser les paramètres utilisés par les autres méthodes.
 
-À l'aide de la logique flou, nous obtenons une reconnaissance de 88.5\% et environs 95\% avec un réseau de neuronnes. Il serait possible d'augmenter le taux de reconnaissance en utilisants plus de données d'apprentissage et en optimisants les paramètres. 
+À l'aide de la logique flou, nous obtenons une reconnaissance de 89\% et environs 95\% avec un réseau de neuronnes. Il serait possible d'augmenter le taux de reconnaissance en utilisants plus de données d'apprentissage et en optimisants les paramètres.
 
 Une des plus grandes difficultés rencontré est l'identification des paramètres permettant de différentier les chutes des non-chutes. Cela semble être une des plus grandes difficultés lors de l'implémentation d'algorithmes de classification.
 
-Les techniques d'intélligences artificiel, particulièrement les réseaux de neurones, s'applique bien à ce type de problème où il est difficille d'identifier des règles pour effecteur la classification. Ces techniques peuvent être réutiliser pour une multitude de problèmes qui seraient difficile de résoudre à l'aide des méthodes classiques. 
+Les techniques d'intélligences artificiel, particulièrement les réseaux de neurones, s'applique bien à ce type de problème où il est difficille d'identifier des règles pour effecteur la classification. Ces techniques peuvent être réutiliser pour une multitude de problèmes qui seraient difficile de résoudre à l'aide des méthodes classiques.
 
 \pagebreak
 \section{Annexe}
