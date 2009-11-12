@@ -146,7 +146,7 @@ Afin de réaliser notre réseau de neurones, nous avons décidé de prendre seul
 
 \begin{figure}
 \centering
-\includegraphics[scale=1]{images/NN.png}
+\includegraphics[scale=0.75]{images/NN.png}
 \caption{Représentation graphique du réseau de neurones}
 \label{fig:NN}
 \end{figure}
@@ -231,7 +231,7 @@ Pour la réalisation de notre réseau de neurones, nous avons utilisé un algori
 
 \subsection{Algorithme génétique}
 
-Originalement, nous voulions utiliser le nombre de pics dans le graphique de la dérivée pour détecter les chutes.
+À l'origine, nous voulions utiliser le nombre de pics dans le graphique de la dérivée pour détecter les chutes.
 Si le graphique d'un capteur contenait un pic, il s'agit probablement d'une chute. S'il n'en contient aucun, il
 ne s'agit pas d'une chute. S’il en contient plusieurs, il s'agit d'une récupération de chute.
 
@@ -289,7 +289,7 @@ FOR n generation
   breeders = SelectBreeders pop
   pop = Reproduce breeders
   pop = Mutate pop
-  
+
 best = pop(MaxIndex(fitnesses))
 
 \end{verbatim}
