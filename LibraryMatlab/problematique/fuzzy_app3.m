@@ -10,6 +10,7 @@ function fuzzy_app3
     %  (see values variable near line 69)
 %     fuzzy_logic_fis = readfis('fuzzy_2.fis');
     fuzzy_logic_fis = readfis('fuzzy_3.fis');
+    
 
     falls = get_falls;
     non_falls = get_non_falls;
@@ -37,8 +38,8 @@ function fuzzy_app3
 
 % k => For binary search of threshold value
 %  for k = 1:20
-%     threshold = 0.35 + (k-1)/100
     threshold = 0.42;
+%     threshold = 0.35 + (k-1)/100
     
     [f_falls_count, f_non_falls_count] = eval_fuzzy(falls, fuzzy_logic_fis, threshold);
     [nf_falls_count, nf_non_falls_count] = eval_fuzzy(non_falls, fuzzy_logic_fis, threshold);
