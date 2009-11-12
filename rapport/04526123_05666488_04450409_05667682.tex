@@ -85,22 +85,41 @@ linkcolor 	= black}
 La chute chez les personnes âgées représente une cause importante d'hospitalisation chez ce groupe de personnes. C'est pour cette raison que le Centre de recherche sur le vieillissement de l'Institut de gériatrie de l'Université de Sherbrooke tente de mettre sur pied un système de détection de chutes. Pour ce faire, ce Centre nous a demandé de réaliser une étude de faisabilité qui évalue plusieurs techniques d'intelligence artificielle capable d'identifier l'occurrence d'une chute. Le rapport qui suit présentera l'analyse des données effectuée avant le traitement et l'étude des techniques d'intelligence artifielle. À la suite de l'analyse, nous verrons les hypothèses simplificatrices que nous avons établies pour évaluer chacune des techniques. Ensuite, il y aura une représentation de l'information, la mise en oeuvre, et l'évaluation des différentes techniques à l'étude. Pour terminer, nous noterons les observations effectuées ainsi que les perspectives futures.
 
 \section{Analyse des données} % Steven
-Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fournies pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurrence d'une chute. Lors de cette analyse, nous avons remarqué qu'il y avait une très grande similitude entre les canaux 1 et 6 comme on peut le voir dans le graphique suivant :
+Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fournies pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurrence d'une chute. Lors de cette analyse, nous avons remarqué qu'il y avait une très grande similitude entre les canaux 2 et 4, et que les canaux 1 et 6 ainsi que les canaux 3 et 5 sont inversés. De plus, nous avons également remarqué que les maximums des canaux du bras (4, 5 et 6) sont plus significatifs que ceux du tronc (1, 2 et 3). Par conséquent, nous utiliserons seulement un capteur afin de simplifier le problème.
 
 \begin{figure}
-\centering
-\includegraphics[scale=0.5]{images/semblable.png}
-\caption{Exemple de graphique entre les canaux 1 et 6}
-\label{fig:semblable}
+    \centering
+    \subfigure[Canaux 1 et 6]{
+        \label{fig:canaux1_6}
+        \fbox{\includegraphics[scale=0.3]{images/Canaux1_6.png}}}
+    \quad
+    \subfigure[Canaux 2 et 4]{
+        \label{fig:canaux2_4}
+        \fbox{\includegraphics[scale=0.3]{images/Canaux2_4.png}}}
+
+    \subfigure[Canaux 3 et 5]{
+        \label{fig:canaux3_5}
+        \fbox{\includegraphics[scale=0.3]{images/Canaux3_5.png}}}
+
+    \caption{Exemple de signaux d'entrée (bras = vert, tronc = bleu}
+    \label{fig:canaux_input}
 \end{figure}
 
-La ligne bleue représente le canal 1 et la ligne verte représente le canal 6. À partir de ce graphique, nous pouvons déterminer que les valeurs du canal 6 sont plus significatives. Une autre observation que nous avons faite lors de l'analyse des données est que les valeurs des maximums et des minimums sont plus grandes lors d'une chute que lors d'une non-chute. Par exemple, lorsque l'on regarde le graphique /ref{fig:semblable} qui représente une chute, on remarque que les maximums se retrouvent autour de 2.5 alors que dans la figure /ref{fig:non\_chute} qui représente les mêmes canaux lors d'une non-chute, les maximums se retrouvent autour de 1.
+Une autre observation que nous avons faite lors de l'analyse des données est que les valeurs des maximums et des minimums sont plus grandes lors d'une chute que lors d'une non-chute. Par exemple, lorsque l'on regarde le graphique \ref{fig:chute} qui représente une chute, on remarque que les maximums se retrouvent autour de 2.5 alors que dans la figure \ref{fig:non-chute} qui représente les mêmes canaux lors d'une non-chute, les maximums se retrouvent autour de 1.
+
 
 \begin{figure}
-\centering
-\includegraphics[scale=0.5]{images/non_chute.png}
-\caption{Exemple de non-chute}
-\label{fig:non_chute}
+    \centering
+    \subfigure[Chute]{
+        \label{fig:chute}
+        \fbox{\includegraphics[scale=0.3]{images/semblable.png}}}
+    \quad
+    \subfigure[Non-chute]{
+        \label{fig:non-chute}
+        \fbox{\includegraphics[scale=0.3]{images/non_chute.png}}}
+
+    \caption{Exemple de signaux d'entrée}
+    \label{fig:canaux_input}
 \end{figure}
 
 \section{Hypothèses simplificatrices}
@@ -289,7 +308,7 @@ FOR n generation
   breeders = SelectBreeders pop
   pop = Reproduce breeders
   pop = Mutate pop
-  
+
 best = pop(MaxIndex(fitnesses))
 
 \end{verbatim}
@@ -340,7 +359,7 @@ Un autre paramètre que nous avons étudié est le sujet utilisé pour les donn�
 \label{tbl:neural_results2}
 \end{table}
 
-Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données. 
+Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données.
 
 \begin{table}
 \centering
