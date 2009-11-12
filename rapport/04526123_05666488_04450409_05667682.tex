@@ -85,7 +85,7 @@ linkcolor 	= black}
 La chute chez les personnes âgées représente une cause importante d'hospitalisation chez ce groupe de personnes. C'est pour cette raison que le Centre de recherche sur le vieillissement de l'Institut de gériatrie de l'Université de Sherbrooke tente de mettre sur pied un système de détection de chutes. Pour ce faire, ce Centre nous a demandé de réaliser une étude de faisabilité qui évalue plusieurs techniques d'intelligence artificielle capable d'identifier l'occurrence d'une chute. Le rapport qui suit présentera l'analyse des données effectuée avant le traitement et l'étude des techniques d'intelligence artifielle. À la suite de l'analyse, nous verrons les hypothèses simplificatrices que nous avons établies pour évaluer chacune des techniques. Ensuite, il y aura une représentation de l'information, la mise en oeuvre, et l'évaluation des différentes techniques à l'étude. Pour terminer, nous noterons les observations effectuées ainsi que les perspectives futures.
 
 \section{Analyse des données} % Steven
-Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fournies pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurrence d'une chute. Lors de cette analyse, nous avons remarqué qu'il y avait une très grande similitude entre les canaux 1 et 6 comme on peut le voir dans le graphique suivant :
+Afin d'émettre des hypothèses simplificatrices, nous avons d'abord effectué une analyse des données qui nous ont été fournies pour faire l'étude des techniques pouvant être utilisées pour détecter l'occurrence d'une chute. Lors de cette analyse, nous avons remarqué qu'il y avait une très grande similitude entre les canaux 1 et 6 comme on peut le voir dans la figure \ref{fig:semblable}.
 
 \begin{figure}
 \centering
@@ -146,7 +146,7 @@ Afin de réaliser notre réseau de neurones, nous avons décidé de prendre seul
 
 \begin{figure}
 \centering
-\includegraphics[scale=1]{images/NN.png}
+\includegraphics[scale=0.75]{images/NN.png}
 \caption{Représentation graphique du réseau de neurones}
 \label{fig:NN}
 \end{figure}
@@ -338,7 +338,7 @@ Un autre paramètre que nous avons étudié est le sujet utilisé pour les donn�
 \label{tbl:neural_results2}
 \end{table}
 
-Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données. 
+Le dernier paramètre que nous avons fait varier est le seuil de l'entraînement. En changeant celui-ci, nous augmentons la durée de l'entraînement, mais nous pouvons potentiellement obtenir une meilleure détection. Nos observations montrent que le réseau n'en est pas plus précis pour autant. En effet, le tableau \ref{tbl:neural_results3} montre que le taux de détection ne s'améliore pas en fonction du seuil d'entraînement. Nous en déduisons que malgré le fait que le réseau de neurone identifie plus précisément l'ensemble d'entraînement, il est moins généralisé pour la détection de la totalité des données.
 
 \begin{table}
 \centering
