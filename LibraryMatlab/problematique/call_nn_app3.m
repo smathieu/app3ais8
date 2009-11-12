@@ -5,5 +5,5 @@ function call_nn_app3
     clear all
     clc
 
-    [net, P, T] = nn_app3(8);
+    [net, P, T] = nn_app3(16);
     nn_test_app3(net);
